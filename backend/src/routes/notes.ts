@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { auth, AuthedRequest } from '../middleware/auth';
 import { Note } from '../models/Note';
+import { User } from '../models/User';
 import { extractContent } from '../services/extract';
 import { generateNotes } from '../services/generate';
 
@@ -22,8 +23,9 @@ router.post('/generate', async (req: AuthedRequest, res) => {
   const input = parsed.data.input.trim();
 
   try {
+    const user = await User.findById(req.userId);
     const extracted = await extractContent(input);
-    const generated = await generateNotes(extracted.type, input, extracted.text);
+    const generated = await generateNotes(extracted.type, input, extracted.text, user?.settings);
 
     const note = await Note.create({
       userId: req.userId,
@@ -35,6 +37,7 @@ router.post('/generate', async (req: AuthedRequest, res) => {
 
     res.status(201).json({ note });
   } catch (err: any) {
+
     const errMsg = err?.message;
     if (errMsg === 'OPENAI_KEY_MISSING') {
       return res.status(503).json({

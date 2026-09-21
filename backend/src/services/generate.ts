@@ -1,5 +1,7 @@
 import OpenAI from 'openai';
-import { SYSTEM_PROMPT, buildUserPrompt } from '../prompts';
+import { buildUserPrompt } from '../prompts';
+import { buildSystemPrompt } from './promptBuilder';
+import { SettingsType } from '../config/presets';
 
 export type GeneratedNotes = {
   title: string;
@@ -94,7 +96,8 @@ function parseJsonFromText(raw: string): { title?: string; content?: string } | 
 async function generateWithOpenGPT(
   type: 'url' | 'topic',
   input: string,
-  text: string
+  text: string,
+  systemPrompt: string
 ): Promise<GeneratedNotes> {
   const userPrompt = buildUserPrompt(type, input, text);
 
@@ -103,7 +106,7 @@ async function generateWithOpenGPT(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
       model: 'openai',
@@ -140,8 +143,10 @@ async function generateWithOpenGPT(
 export async function generateNotes(
   type: 'url' | 'topic',
   input: string,
-  text: string
+  text: string,
+  settings?: Partial<SettingsType> | null
 ): Promise<GeneratedNotes> {
+  const systemPrompt = buildSystemPrompt(settings);
   const apiKey = process.env.OPENAI_API_KEY?.trim();
 
   // If official OpenAI key is provided, use official OpenAI SDK
@@ -153,7 +158,7 @@ export async function generateNotes(
       const response = await openai.chat.completions.create({
         model: 'gpt-4o',
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
         response_format: { type: 'json_object' },
@@ -172,6 +177,7 @@ export async function generateNotes(
     }
   }
 
-  // Use open GPT model
-  return await generateWithOpenGPT(type, input, text);
+  // Use open GPT model with custom dynamic system prompt
+  return await generateWithOpenGPT(type, input, text, systemPrompt);
 }
+

@@ -1,13 +1,16 @@
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react';
-import { Sparkles, ArrowRight, Video, BookOpen, Layers, Network, Terminal, Compass } from 'lucide-react';
+import { Sparkles, ArrowRight, Video, BookOpen, Layers, Network, Terminal, Compass, SlidersHorizontal } from 'lucide-react';
 import TiltCard from './TiltCard';
 import { useTheme } from '../context/ThemeContext';
+import { SettingsType } from '../config/presets';
 
 type Props = {
   value: string;
   onChange: (v: string) => void;
   onSubmit: () => void;
   loading: boolean;
+  settings?: SettingsType | null;
+  onOpenSettings?: () => void;
 };
 
 const SUGGESTIONS = [
@@ -47,7 +50,14 @@ const MODES = [
   { id: 'algorithms', label: 'Code & Complexity', icon: Terminal },
 ];
 
-export default function InputBox({ value, onChange, onSubmit, loading }: Props) {
+export default function InputBox({
+  value,
+  onChange,
+  onSubmit,
+  loading,
+  settings,
+  onOpenSettings,
+}: Props) {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [selectedMode, setSelectedMode] = useState('comprehensive');
   const { theme } = useTheme();
@@ -69,10 +79,14 @@ export default function InputBox({ value, onChange, onSubmit, loading }: Props) 
     }
   }
 
+  const presetName = settings?.preset || 'standard';
+  const languageName = settings?.language || 'english';
+  const difficultyName = settings?.difficulty || 'auto';
+
   return (
     <div className="w-full max-w-3xl px-4 animate-fade-in-up relative z-10">
       {/* Top Formal Antigravity Brand Hero */}
-      <div className="mb-8 text-center">
+      <div className="mb-6 text-center">
         <div
           className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-mono mb-4 backdrop-blur-md border transition-colors ${
             isDark
@@ -131,12 +145,37 @@ export default function InputBox({ value, onChange, onSubmit, loading }: Props) 
         </div>
       </div>
 
+      {/* Compact Settings Summary Badge Above Input */}
+      {onOpenSettings && (
+        <div className="mb-3 flex items-center justify-between px-2 text-xs">
+          <div className="flex items-center gap-2 text-slate-400">
+            <SlidersHorizontal className="h-3.5 w-3.5 text-indigo-500" />
+            <span>
+              Using:{' '}
+              <strong className="capitalize text-slate-300 dark:text-white font-medium">
+                {presetName} preset
+              </strong>{' '}
+              · <span className="capitalize">{languageName}</span> ·{' '}
+              <span className="capitalize">{difficultyName} difficulty</span>
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={onOpenSettings}
+            className="text-indigo-400 hover:text-indigo-300 text-xs font-semibold underline underline-offset-2 transition"
+          >
+            Change
+          </button>
+        </div>
+      )}
+
       {/* Main 3D Elevated Glass Input Card */}
       <div
         className={`rounded-3xl p-4 shadow-3d transition-all focus-within:border-indigo-500/80 focus-within:shadow-neon-indigo ${
           isDark ? 'glass-panel-elevated' : 'glass-panel-elevated bg-white/90 border-indigo-200'
         }`}
       >
+
         <textarea
           ref={ref}
           rows={1}

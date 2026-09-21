@@ -7,7 +7,8 @@ import SettingsView from '../components/SettingsView';
 import SynthesisProgress from '../components/SynthesisProgress';
 import AntigravityCanvas from '../components/AntigravityCanvas';
 import { useTheme } from '../context/ThemeContext';
-import { NoteSummary, Note, fetchHistory, fetchNote, generateNote, deleteNote } from '../api';
+import { SettingsType, DEFAULT_SETTINGS } from '../config/presets';
+import { NoteSummary, Note, fetchHistory, fetchNote, generateNote, deleteNote, fetchSettings } from '../api';
 import { AlertTriangle, X, Menu } from 'lucide-react';
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
   const [history, setHistory] = useState<NoteSummary[]>([]);
   const [activeNote, setActiveNote] = useState<Note | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settings, setSettings] = useState<SettingsType>(DEFAULT_SETTINGS);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -29,7 +31,17 @@ export default function Home() {
 
   useEffect(() => {
     loadHistory();
+    loadUserPreferences();
   }, []);
+
+  async function loadUserPreferences() {
+    try {
+      const data = await fetchSettings();
+      setSettings(data);
+    } catch {
+      // silent
+    }
+  }
 
   async function loadHistory() {
     try {
@@ -39,6 +51,7 @@ export default function Home() {
       // silent
     }
   }
+
 
   async function handleSelect(id: string) {
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
@@ -164,7 +177,10 @@ export default function Home() {
         )}
         {isSettingsOpen ? (
           <SettingsView
-            onBack={() => setIsSettingsOpen(false)}
+            onBack={() => {
+              setIsSettingsOpen(false);
+              loadUserPreferences();
+            }}
             onLogout={handleLogout}
           />
         ) : activeNote ? (
@@ -187,7 +203,10 @@ export default function Home() {
                   onChange={setInput}
                   onSubmit={handleGenerate}
                   loading={loading}
+                  settings={settings}
+                  onOpenSettings={handleOpenSettings}
                 />
+
 
                 {error && (
                   <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-rose-500/40 bg-rose-500/10 backdrop-blur-md px-4 py-3 text-xs text-rose-500 max-w-lg shadow-xl animate-fade-in-up">

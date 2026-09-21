@@ -77,3 +77,42 @@ export async function fetchNote(id: string) {
 export async function deleteNote(id: string) {
   await api.delete(`/notes/${id}`);
 }
+
+import { SettingsType } from './config/presets';
+
+export async function fetchSettings(): Promise<SettingsType> {
+  const { data } = await api.get<SettingsType>('/settings');
+  return data;
+}
+
+export async function updateSettings(partialSettings: Partial<SettingsType>): Promise<SettingsType> {
+  const { data } = await api.put<SettingsType>('/settings', partialSettings);
+  return data;
+}
+
+export async function resetSettings(): Promise<SettingsType> {
+  const { data } = await api.post<SettingsType>('/settings/reset');
+  return data;
+}
+
+export async function applyPreset(preset: string): Promise<SettingsType> {
+  const { data } = await api.post<SettingsType>('/settings/apply-preset', { preset });
+  return data;
+}
+
+export async function exportSettings(): Promise<void> {
+  const res = await api.get('/settings/export', { responseType: 'blob' });
+  const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'gyanai-settings.json');
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+export async function deleteUserData(): Promise<{ ok: boolean; message: string }> {
+  const { data } = await api.delete<{ ok: boolean; message: string }>('/settings/data');
+  return data;
+}
+

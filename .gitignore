@@ -11,10 +11,19 @@ build/
 # Environment variables & secrets
 .env
 .env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.env
 !.env.example
 frontend/.env
 backend/.env
+**/.env
+**/.env.*
+**/*.env
+*credentials*
+*secret*
 
 # Logs
 *.log
