@@ -4,7 +4,7 @@ Notes generator. Paste a topic, get structured Markdown notes via OpenAI. (YouTu
 
 ## Status: milestones 1–4 complete
 
-- [x] Scaffold client + server, MongoDB wired
+- [x] Scaffold frontend + backend, MongoDB wired
 - [x] Auth: register/login, JWT middleware
 - [x] Note model
 - [x] `/notes/generate` — topic input, end-to-end, saved to DB
@@ -14,23 +14,23 @@ Notes generator. Paste a topic, get structured Markdown notes via OpenAI. (YouTu
 
 ## Run it
 
-### Server
+### Backend
 ```bash
-cd server
+cd backend
 cp .env.example .env   # fill in MONGODB_URI, OPENAI_API_KEY, JWT_SECRET
 npm install
 npm run dev
 ```
 
-### Client
+### Frontend
 ```bash
-cd client
+cd frontend
 cp .env.example .env
 npm install
 npm run dev
 ```
 
-Client on :5173, server on :5000.
+Frontend on :5173, backend on :5000.
 
 ## Notes on choices
 

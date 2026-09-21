@@ -3,10 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import InputBox from '../components/InputBox';
 import NotesView from '../components/NotesView';
+import SynthesisProgress from '../components/SynthesisProgress';
+import AntigravityCanvas from '../components/AntigravityCanvas';
+import ThemeToggle from '../components/ThemeToggle';
+import { useTheme } from '../context/ThemeContext';
 import { NoteSummary, Note, fetchHistory, fetchNote, generateNote, deleteNote } from '../api';
+import { AlertTriangle, X } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [history, setHistory] = useState<NoteSummary[]>([]);
   const [activeNote, setActiveNote] = useState<Note | null>(null);
   const [input, setInput] = useState('');
@@ -93,7 +100,17 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0c0d14] text-[#e2e6ff]">
+    <div
+      className={`relative flex h-screen overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-space-base text-space-text' : 'bg-slate-50 text-slate-900'
+      }`}
+    >
+      {/* 3D Antigravity Background Canvas */}
+      <AntigravityCanvas interactive={true} opacity={isDark ? 0.7 : 0.55} />
+
+      {/* Subtle Radial Glow Light Accents */}
+      <div className="pointer-events-none absolute inset-0 bg-radial-gradient" />
+
       <Sidebar
         notes={history}
         activeId={activeNote?._id ?? null}
@@ -103,7 +120,14 @@ export default function Home() {
         onLogout={handleLogout}
       />
 
-      <main className="flex flex-1 flex-col overflow-y-auto bg-[#0c0d14] bg-dot-pattern">
+      <main className="relative flex flex-1 flex-col overflow-y-auto bg-transparent">
+        {/* Top Right Floating Theme Toggle (when on blank landing canvas) */}
+        {!activeNote && (
+          <div className="absolute top-5 right-6 z-20 hidden sm:block">
+            <ThemeToggle showLabel={true} />
+          </div>
+        )}
+
         {activeNote ? (
           <NotesView
             title={activeNote.title}
@@ -114,22 +138,9 @@ export default function Home() {
             onDelete={() => handleDelete(activeNote._id)}
           />
         ) : (
-          <div className="flex flex-1 flex-col items-center justify-center p-6">
+          <div className="flex flex-1 flex-col items-center justify-center p-6 sm:p-10 my-auto">
             {loading ? (
-              <div className="flex flex-col items-center gap-5 text-center animate-fade-in">
-                <div className="relative flex h-16 w-16 items-center justify-center">
-                  <div className="absolute h-full w-full animate-ping rounded-2xl bg-[#7c87ff]/20" />
-                  <div className="h-12 w-12 animate-spin rounded-2xl border-2 border-[#272a42] border-t-[#7c87ff] border-r-[#2fd5f6]" />
-                </div>
-                <div>
-                  <p className="text-base font-bold text-[#f4f6ff] tracking-tight">
-                    Synthesizing study notes…
-                  </p>
-                  <p className="text-xs text-[#676d94] font-mono mt-1.5">
-                    Analyzing content, generating Mermaid flowcharts & code examples
-                  </p>
-                </div>
-              </div>
+              <SynthesisProgress />
             ) : (
               <>
                 <InputBox
@@ -138,12 +149,19 @@ export default function Home() {
                   onSubmit={handleGenerate}
                   loading={loading}
                 />
+
                 {error && (
-                  <div className="mt-5 flex items-center gap-2.5 rounded-2xl border border-[#f87171]/30 bg-[#1e1319] px-4 py-3 text-xs text-[#fca5a5] max-w-lg shadow-lg">
-                    <svg className="h-4 w-4 flex-shrink-0 text-[#f87171]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{error}</span>
+                  <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-rose-500/40 bg-rose-500/10 backdrop-blur-md px-4 py-3 text-xs text-rose-500 max-w-lg shadow-xl animate-fade-in-up">
+                    <div className="flex items-center gap-2.5">
+                      <AlertTriangle className="h-4 w-4 shrink-0 text-rose-500" />
+                      <span>{error}</span>
+                    </div>
+                    <button
+                      onClick={() => setError('')}
+                      className="rounded p-1 hover:bg-rose-500/20 text-rose-500"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 )}
               </>
