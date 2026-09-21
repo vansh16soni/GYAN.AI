@@ -8,7 +8,7 @@ import SynthesisProgress from '../components/SynthesisProgress';
 import AntigravityCanvas from '../components/AntigravityCanvas';
 import { useTheme } from '../context/ThemeContext';
 import { NoteSummary, Note, fetchHistory, fetchNote, generateNote, deleteNote } from '../api';
-import { AlertTriangle, X } from 'lucide-react';
+import { AlertTriangle, X, Menu } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -20,6 +20,12 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768;
+    }
+    return true;
+  });
 
   useEffect(() => {
     loadHistory();
@@ -35,6 +41,9 @@ export default function Home() {
   }
 
   async function handleSelect(id: string) {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
     setError('');
     setIsSettingsOpen(false);
     try {
@@ -46,6 +55,9 @@ export default function Home() {
   }
 
   function handleNew() {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
     setIsSettingsOpen(false);
     setActiveNote(null);
     setInput('');
@@ -122,6 +134,8 @@ export default function Home() {
       <div className="pointer-events-none absolute inset-0 bg-radial-gradient" />
 
       <Sidebar
+        isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen((prev) => !prev)}
         notes={history}
         activeId={activeNote?._id ?? null}
         isSettingsActive={isSettingsOpen}
@@ -133,6 +147,21 @@ export default function Home() {
       />
 
       <main className="relative flex flex-1 flex-col overflow-y-auto bg-transparent">
+        {/* Floating Sandwich Toggle Button (when sidebar is collapsed) */}
+        {!sidebarOpen && (
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            title="Open sidebar"
+            className={`fixed top-4 left-4 z-30 flex h-10 w-10 items-center justify-center rounded-2xl border shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 active:scale-95 ${
+              isDark
+                ? 'border-slate-700/60 bg-space-card/90 text-slate-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 shadow-indigo-950/30'
+                : 'border-slate-200 bg-white/90 text-slate-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 shadow-slate-200'
+            }`}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        )}
         {isSettingsOpen ? (
           <SettingsView
             onBack={() => setIsSettingsOpen(false)}

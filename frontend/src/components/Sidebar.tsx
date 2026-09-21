@@ -11,9 +11,12 @@ import {
   ChevronRight,
   Settings,
   ShieldCheck,
+  Menu,
 } from 'lucide-react';
 
 type Props = {
+  isOpen?: boolean;
+  onToggle?: () => void;
   notes: NoteSummary[];
   activeId: string | null;
   isSettingsActive?: boolean;
@@ -37,6 +40,8 @@ function relativeDate(iso: string) {
 }
 
 export default function Sidebar({
+  isOpen = true,
+  onToggle,
   notes,
   activeId,
   isSettingsActive = false,
@@ -82,37 +87,68 @@ export default function Sidebar({
   } catch {}
 
   return (
-    <aside
-      className={`relative z-20 flex h-full w-72 flex-shrink-0 flex-col border-r select-none transition-colors duration-300 ${
-        isDark
-          ? 'border-slate-800/80 bg-space-sidebar text-slate-200'
-          : 'border-slate-200 bg-white/95 text-slate-800 backdrop-blur-md'
-      }`}
-    >
-      {/* Brand & New note header */}
-      <div className={`p-4 border-b ${isDark ? 'border-slate-800/70' : 'border-slate-200'}`}>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 text-white shadow-md shadow-indigo-500/25">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h1
-                className={`text-base font-extrabold tracking-tight leading-tight flex items-center gap-1 font-display ${
-                  isDark ? 'text-white' : 'text-slate-900'
-                }`}
-              >
-                gyan<span className="text-indigo-500">.ai</span>
-              </h1>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <p className="text-[10px] text-slate-400 font-mono font-medium tracking-wider uppercase">
-                  Antigravity Core
-                </p>
+    <>
+      {/* Mobile Backdrop Overlay */}
+      {isOpen && (
+        <div
+          onClick={onToggle}
+          className="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300"
+          aria-hidden="true"
+        />
+      )}
+
+      <aside
+        className={`fixed md:relative inset-y-0 left-0 z-30 flex h-full flex-shrink-0 flex-col border-r select-none transition-all duration-300 ease-in-out ${
+          isOpen
+            ? 'w-72 translate-x-0 opacity-100'
+            : 'w-0 -translate-x-full md:translate-x-0 md:w-0 opacity-0 pointer-events-none border-r-0'
+        } ${
+          isDark
+            ? 'border-slate-800/80 bg-space-sidebar text-slate-200'
+            : 'border-slate-200 bg-white/95 text-slate-800 backdrop-blur-md'
+        }`}
+      >
+        <div className="w-72 flex flex-col h-full overflow-hidden">
+          {/* Brand & New note header */}
+          <div className={`p-4 border-b ${isDark ? 'border-slate-800/70' : 'border-slate-200'}`}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="relative flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 text-white shadow-md shadow-indigo-500/25">
+                  <Sparkles className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h1
+                    className={`text-base font-extrabold tracking-tight leading-tight flex items-center gap-1 font-display ${
+                      isDark ? 'text-white' : 'text-slate-900'
+                    }`}
+                  >
+                    gyan<span className="text-indigo-500">.ai</span>
+                  </h1>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <p className="text-[10px] text-slate-400 font-mono font-medium tracking-wider uppercase">
+                      Antigravity Core
+                    </p>
+                  </div>
+                </div>
               </div>
+
+              {/* Sandwich collapse toggle button */}
+              {onToggle && (
+                <button
+                  type="button"
+                  onClick={onToggle}
+                  title="Collapse sidebar"
+                  className={`rounded-xl p-2 transition-all duration-200 hover:scale-105 active:scale-95 ${
+                    isDark
+                      ? 'text-slate-400 hover:bg-slate-800/80 hover:text-white'
+                      : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
+                >
+                  <Menu className="h-4 w-4" />
+                </button>
+              )}
             </div>
-          </div>
-        </div>
 
         {/* Action Button: New Synthesis */}
         <button
@@ -295,7 +331,9 @@ export default function Sidebar({
           </button>
         </div>
       </div>
-    </aside>
+        </div>
+      </aside>
+    </>
   );
 }
 
