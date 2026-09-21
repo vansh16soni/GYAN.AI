@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import InputBox from '../components/InputBox';
 import NotesView from '../components/NotesView';
+import SettingsView from '../components/SettingsView';
 import SynthesisProgress from '../components/SynthesisProgress';
 import AntigravityCanvas from '../components/AntigravityCanvas';
-import ThemeToggle from '../components/ThemeToggle';
 import { useTheme } from '../context/ThemeContext';
 import { NoteSummary, Note, fetchHistory, fetchNote, generateNote, deleteNote } from '../api';
 import { AlertTriangle, X } from 'lucide-react';
@@ -16,6 +16,7 @@ export default function Home() {
   const isDark = theme === 'dark';
   const [history, setHistory] = useState<NoteSummary[]>([]);
   const [activeNote, setActiveNote] = useState<Note | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,6 +36,7 @@ export default function Home() {
 
   async function handleSelect(id: string) {
     setError('');
+    setIsSettingsOpen(false);
     try {
       const note = await fetchNote(id);
       setActiveNote(note);
@@ -44,8 +46,15 @@ export default function Home() {
   }
 
   function handleNew() {
+    setIsSettingsOpen(false);
     setActiveNote(null);
     setInput('');
+    setError('');
+  }
+
+  function handleOpenSettings() {
+    setActiveNote(null);
+    setIsSettingsOpen(true);
     setError('');
   }
 
@@ -79,6 +88,7 @@ export default function Home() {
     try {
       const note = await generateNote(input.trim());
       setActiveNote(note);
+      setIsSettingsOpen(false);
       setInput('');
       await loadHistory();
     } catch (err: any) {
@@ -114,21 +124,21 @@ export default function Home() {
       <Sidebar
         notes={history}
         activeId={activeNote?._id ?? null}
+        isSettingsActive={isSettingsOpen}
         onSelect={handleSelect}
         onNew={handleNew}
         onDelete={handleDelete}
         onLogout={handleLogout}
+        onOpenSettings={handleOpenSettings}
       />
 
       <main className="relative flex flex-1 flex-col overflow-y-auto bg-transparent">
-        {/* Top Right Floating Theme Toggle (when on blank landing canvas) */}
-        {!activeNote && (
-          <div className="absolute top-5 right-6 z-20 hidden sm:block">
-            <ThemeToggle showLabel={true} />
-          </div>
-        )}
-
-        {activeNote ? (
+        {isSettingsOpen ? (
+          <SettingsView
+            onBack={() => setIsSettingsOpen(false)}
+            onLogout={handleLogout}
+          />
+        ) : activeNote ? (
           <NotesView
             title={activeNote.title}
             content={activeNote.content}
@@ -172,3 +182,4 @@ export default function Home() {
     </div>
   );
 }
+

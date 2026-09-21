@@ -1,16 +1,27 @@
 import { useState } from 'react';
 import { NoteSummary } from '../api';
-import ThemeToggle from './ThemeToggle';
 import { useTheme } from '../context/ThemeContext';
-import { Plus, Search, Trash2, LogOut, FileText, Sparkles, ChevronRight, Activity } from 'lucide-react';
+import {
+  Plus,
+  Search,
+  Trash2,
+  LogOut,
+  FileText,
+  Sparkles,
+  ChevronRight,
+  Settings,
+  ShieldCheck,
+} from 'lucide-react';
 
 type Props = {
   notes: NoteSummary[];
   activeId: string | null;
+  isSettingsActive?: boolean;
   onSelect: (id: string) => void;
   onNew: () => void;
   onDelete: (id: string) => void;
   onLogout: () => void;
+  onOpenSettings: () => void;
 };
 
 function relativeDate(iso: string) {
@@ -25,7 +36,16 @@ function relativeDate(iso: string) {
   return new Date(iso).toLocaleDateString();
 }
 
-export default function Sidebar({ notes, activeId, onSelect, onNew, onDelete, onLogout }: Props) {
+export default function Sidebar({
+  notes,
+  activeId,
+  isSettingsActive = false,
+  onSelect,
+  onNew,
+  onDelete,
+  onLogout,
+  onOpenSettings,
+}: Props) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -50,12 +70,14 @@ export default function Sidebar({ notes, activeId, onSelect, onNew, onDelete, on
   }
 
   let userName = 'Antigravity User';
+  let userEmail = 'user@gyan.ai';
   try {
     const stored = localStorage.getItem('user');
     if (stored) {
       const u = JSON.parse(stored);
       if (u.username) userName = u.username;
       else if (u.email) userName = u.email.split('@')[0];
+      if (u.email) userEmail = u.email;
     }
   } catch {}
 
@@ -134,7 +156,7 @@ export default function Sidebar({ notes, activeId, onSelect, onNew, onDelete, on
           </div>
         ) : (
           filteredNotes.map((n) => {
-            const isActive = activeId === n._id;
+            const isActive = !isSettingsActive && activeId === n._id;
             const isConfirming = deletingId === n._id;
 
             return (
@@ -197,53 +219,83 @@ export default function Sidebar({ notes, activeId, onSelect, onNew, onDelete, on
         )}
       </div>
 
-      {/* Footer / Theme Toggle & User Profile */}
+      {/* Footer / Settings Navigation & User Profile */}
       <div
         className={`border-t p-3 transition-colors duration-300 ${
           isDark ? 'border-slate-800/80 bg-space-base' : 'border-slate-200 bg-slate-50'
         }`}
       >
-        {/* Dynamic Theme Switcher in Sidebar */}
-        <div className="mb-3 flex items-center justify-between px-1">
-          <span className="text-[11px] font-mono text-slate-400 font-medium">Interface Theme</span>
-          <ThemeToggle />
-        </div>
-
-        <div className="flex items-center justify-between gap-2 px-1 pt-2 border-t border-slate-700/20">
+        {/* Settings & Profile Entry Button */}
+        <button
+          onClick={onOpenSettings}
+          className={`group w-full flex items-center justify-between rounded-2xl p-2.5 transition-all text-left border mb-2 ${
+            isSettingsActive
+              ? isDark
+                ? 'bg-indigo-950/60 border-indigo-500/50 text-white shadow-md shadow-indigo-500/10'
+                : 'bg-indigo-50 border-indigo-200 text-indigo-950 shadow-sm'
+              : isDark
+              ? 'border-slate-800/80 bg-space-card/60 hover:bg-space-card hover:border-slate-700 text-slate-300 hover:text-white'
+              : 'border-slate-200 bg-white/80 hover:bg-white hover:border-indigo-200 text-slate-700 hover:text-indigo-900'
+          }`}
+        >
           <div className="flex items-center gap-2.5 min-w-0">
             <div
-              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold font-mono uppercase ${
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-bold font-mono uppercase shadow-sm ${
                 isDark
-                  ? 'bg-indigo-900/60 border border-indigo-700/40 text-cyan-300'
-                  : 'bg-indigo-100 border border-indigo-200 text-indigo-700'
+                  ? 'bg-gradient-to-tr from-indigo-900 to-indigo-700 text-cyan-300 border border-indigo-600/40'
+                  : 'bg-gradient-to-tr from-indigo-100 to-indigo-50 text-indigo-700 border border-indigo-200'
               }`}
             >
               {userName.charAt(0)}
             </div>
             <div className="min-w-0">
-              <p
-                className={`truncate text-xs font-semibold ${
-                  isDark ? 'text-white' : 'text-slate-800'
-                }`}
-              >
-                {userName}
-              </p>
-              <p className="truncate text-[10px] font-mono text-slate-400 flex items-center gap-1">
-                <Activity className="h-2.5 w-2.5 text-emerald-400" />
-                Active Session
+              <div className="flex items-center gap-1.5">
+                <p className="truncate text-xs font-bold font-display leading-tight">
+                  {userName}
+                </p>
+              </div>
+              <p className="truncate text-[10px] font-mono text-slate-400 flex items-center gap-1 mt-0.5">
+                <Settings className={`h-2.5 w-2.5 ${isSettingsActive ? 'text-indigo-400 animate-spin-slow' : 'text-slate-400'}`} />
+                Settings & Details
               </p>
             </div>
           </div>
 
+          <div className="flex items-center gap-1">
+            <span
+              className={`rounded-full px-1.5 py-0.5 text-[9px] font-mono uppercase font-bold border ${
+                isDark
+                  ? 'border-indigo-800/60 bg-indigo-950/80 text-cyan-300'
+                  : 'border-indigo-200 bg-indigo-50 text-indigo-700'
+              }`}
+            >
+              {theme}
+            </span>
+            <ChevronRight
+              className={`h-3.5 w-3.5 transition-transform ${
+                isSettingsActive ? 'text-indigo-500 translate-x-0.5' : 'text-slate-400 group-hover:translate-x-0.5'
+              }`}
+            />
+          </div>
+        </button>
+
+        {/* Quick Logout & Active Session Footer info */}
+        <div className="flex items-center justify-between px-1.5 pt-1 text-[10px] font-mono text-slate-400">
+          <div className="flex items-center gap-1">
+            <ShieldCheck className="h-3 w-3 text-emerald-400" />
+            <span>Active Session</span>
+          </div>
           <button
             onClick={onLogout}
             title="Log out"
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-rose-500 transition"
+            className="hover:text-rose-500 transition-colors flex items-center gap-1 font-sans"
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-3 w-3" />
+            <span>Logout</span>
           </button>
         </div>
       </div>
     </aside>
   );
 }
+
