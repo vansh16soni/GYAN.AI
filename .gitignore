@@ -1,38 +1,20 @@
 # Dependencies
 node_modules/
 */node_modules/
-**/node_modules/
 
 # Production builds
 dist/
 */dist/
-**/dist/
 build/
 */build/
-**/build/
 
-# Environment variables, personal details & secrets
+# Environment variables & secrets
 .env
 .env.*
 *.env
 !.env.example
-!*/.env.example
 frontend/.env
 backend/.env
-frontend/.env.local
-backend/.env.local
-frontend/.env.*.local
-backend/.env.*.local
-*.local
-*.pem
-*.key
-*.cert
-*.crt
-id_rsa*
-*.secret
-credentials.json
-token.json
-.credentials
 
 # Logs
 *.log
@@ -41,19 +23,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Editor, OS and personal files
+# Editor and OS files
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.user
-*.userosscache
-*.sln.docstates
 
-# TypeScript build info & caches
+# TypeScript build info
 *.tsbuildinfo
-.eslintcache
-.cache/

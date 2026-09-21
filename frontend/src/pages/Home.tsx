@@ -19,29 +19,10 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth >= 768;
-    }
-    return true;
-  });
 
   useEffect(() => {
     loadHistory();
   }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-        e.preventDefault();
-        setIsSidebarOpen((prev) => !prev);
-      } else if (e.key === 'Escape' && isSidebarOpen && window.innerWidth < 768) {
-        setIsSidebarOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isSidebarOpen]);
 
   async function loadHistory() {
     try {
@@ -130,32 +111,7 @@ export default function Home() {
       {/* Subtle Radial Glow Light Accents */}
       <div className="pointer-events-none absolute inset-0 bg-radial-gradient" />
 
-      {/* Floating Sandwich (Hamburger) Menu Button when sidebar is closed or on mobile */}
-      {(!isSidebarOpen || (typeof window !== 'undefined' && window.innerWidth < 768)) && (
-        <button
-          onClick={() => setIsSidebarOpen((prev) => !prev)}
-          title="Toggle Navigation Menu (Ctrl+B)"
-          aria-label="Toggle Navigation Menu"
-          className={`fixed top-4 left-4 z-30 flex items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 text-xs font-semibold backdrop-blur-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg ${
-            isDark
-              ? 'border-slate-800/90 bg-space-sidebar/90 text-slate-200 hover:border-indigo-500/50 hover:bg-space-card hover:text-white shadow-black/40'
-              : 'border-slate-200 bg-white/90 text-slate-700 hover:border-indigo-300 hover:bg-white hover:text-indigo-600 shadow-slate-200/60'
-          }`}
-        >
-          {/* Animated 3-Bar Sandwich Icon */}
-          <div className="flex flex-col justify-between w-4 h-3.5">
-            <span className="h-0.5 w-full rounded-full bg-current transition-all" />
-            <span className="h-0.5 w-3/4 rounded-full bg-current transition-all" />
-            <span className="h-0.5 w-full rounded-full bg-current transition-all" />
-          </div>
-          <span className="font-display font-medium text-xs hidden sm:inline">Menu</span>
-        </button>
-      )}
-
       <Sidebar
-        isOpen={isSidebarOpen}
-        onToggle={() => setIsSidebarOpen((prev) => !prev)}
-        onClose={() => setIsSidebarOpen(false)}
         notes={history}
         activeId={activeNote?._id ?? null}
         onSelect={handleSelect}
@@ -216,4 +172,3 @@ export default function Home() {
     </div>
   );
 }
-
