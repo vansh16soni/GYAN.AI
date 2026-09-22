@@ -13,52 +13,66 @@ async function main() {
 
   const app = express();
 
-  // 1. HTTP Security Headers
-  app.use(
-    helmet({
-      crossOriginResourcePolicy: { policy: 'cross-origin' },
-      contentSecurityPolicy: false, // Allows flexible API usage
-    })
-  );
+  // 1. Direct Universal CORS & Preflight Handling (Must be first before all other middleware)
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin) {
+      res.header('Access-Control-Allow-Origin', origin);
+    } else {
+      res.header('Access-Control-Allow-Origin', '*');
+    }
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-  // 2. Production CORS Setup (Permissive for JWT Header Authentication)
+    if (req.method === 'OPTIONS') {
+      return res.status(204).end();
+    }
+    next();
+  });
+
   app.use(
     cors({
-      origin: true, // Automatically reflects the request origin
+      origin: true,
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     })
   );
-  app.options('*', cors());
 
-  // 3. Body Parsing Limit (Mitigate Payload Flooding)
+  // 2. HTTP Security Headers
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+      contentSecurityPolicy: false,
+    })
+  );
+
+  // 3. Body Parsing Limit
   app.use(express.json({ limit: '2mb' }));
 
-  // 4. Rate Limiting Protection (DDoS & Brute Force Defense)
+  // 4. Rate Limiting Protection
   const globalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200, // 200 requests per IP per window
+    windowMs: 15 * 60 * 1000,
+    max: 300,
     standardHeaders: true,
     legacyHeaders: false,
-    message: { error: 'TOO_MANY_REQUESTS', message: 'Too many requests from this IP, please try again later.' },
+    message: { error: 'TOO_MANY_REQUESTS', message: 'Too many requests, please try again later.' },
   });
   app.use('/api', globalLimiter);
 
-  // Stricter limiter on authentication (brute force protection)
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 30, // 30 attempts per 15 minutes
+    max: 50,
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: 'TOO_MANY_AUTH_ATTEMPTS', message: 'Too many authentication attempts, please try again later.' },
   });
   app.use('/api/auth', authLimiter);
 
-  // Generation limiter (protects OpenAI API credits)
   const generateLimiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 15, // 15 note generations per minute
+    windowMs: 60 * 1000,
+    max: 20,
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: 'GENERATION_RATE_LIMIT', message: 'Synthesis request rate limit exceeded. Please wait a moment.' },
@@ -70,12 +84,12 @@ async function main() {
   app.use('/api/notes', notesRoutes);
   app.use('/api/settings', settingsRoutes);
 
-  // 6. Health Check Endpoint (Used by Render for zero-downtime health monitoring)
+  // 6. Health Check Endpoint
   app.get('/api/health', (_req, res) => {
     res.status(200).json({ ok: true, timestamp: new Date().toISOString(), service: 'gyan-ai-backend' });
   });
 
-  // 7. Global Production Error Handler (Prevents stack trace leaks)
+  // 7. Global Production Error Handler
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     console.error('Unhandled API Error:', err?.message || err);
     res.status(err?.status || 500).json({
