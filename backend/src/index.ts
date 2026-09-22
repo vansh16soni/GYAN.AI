@@ -21,38 +21,16 @@ async function main() {
     })
   );
 
-  // 2. Production CORS Setup
-  const allowedOrigins = [
-    process.env.CLIENT_URL,
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:5173',
-  ].filter(Boolean) as string[];
-
+  // 2. Production CORS Setup (Permissive for JWT Header Authentication)
   app.use(
     cors({
-      origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps, curl, server-to-server)
-        if (!origin) return callback(null, true);
-
-        // Check if origin matches allowed list or matches onrender.com subdomains
-        const isAllowed =
-          allowedOrigins.includes(origin) ||
-          allowedOrigins.some((allowed) => allowed.replace(/\/$/, '') === origin.replace(/\/$/, '')) ||
-          (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'));
-
-        if (isAllowed) {
-          callback(null, true);
-        } else {
-          // Log unauthorized attempt without crashing
-          callback(null, true); // Permissive fallback with headers set, or restricted
-        }
-      },
+      origin: true, // Automatically reflects the request origin
       credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     })
   );
+  app.options('*', cors());
 
   // 3. Body Parsing Limit (Mitigate Payload Flooding)
   app.use(express.json({ limit: '2mb' }));
