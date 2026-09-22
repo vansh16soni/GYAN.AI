@@ -61,7 +61,7 @@ export default function SettingsView({ onBack, onLogout }: Props) {
   const [deletingData, setDeletingData] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
 
-  let userName = 'Antigravity User';
+  let userName = 'Tree User';
   let userEmail = 'user@gyan.ai';
   let userId = 'gyan_user_' + Math.random().toString(36).substring(2, 9);
 
@@ -187,31 +187,31 @@ export default function SettingsView({ onBack, onLogout }: Props) {
           onClick={onBack}
           className={`inline-flex items-center gap-2 rounded-2xl border px-3.5 py-2 text-xs font-semibold backdrop-blur-md transition-all hover:scale-105 active:scale-95 shadow-sm ${
             isDark
-              ? 'border-slate-800 bg-space-card/80 text-slate-300 hover:border-slate-700 hover:bg-space-cardHover hover:text-white'
-              : 'border-slate-200 bg-white/90 text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:text-indigo-600'
+              ? 'border-emerald-900 bg-space-card/80 text-emerald-200 hover:border-emerald-700 hover:bg-space-cardHover hover:text-white'
+              : 'border-emerald-200 bg-white/90 text-emerald-800 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-950'
           }`}
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Back to Notes</span>
+          <span>Back to Tree Notes</span>
         </button>
 
         <div className="flex items-center gap-2.5">
           {saveSuccess && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs font-mono font-medium text-emerald-400 animate-fade-in-up">
               <Check className="h-3.5 w-3.5" />
-              Settings Saved
+              Tree Settings Saved
             </span>
           )}
 
           <div
             className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-mono font-medium border ${
               isDark
-                ? 'border-indigo-500/30 bg-indigo-950/40 text-cyan-300'
-                : 'border-indigo-200 bg-indigo-50 text-indigo-700'
+                ? 'border-emerald-500/30 bg-emerald-950/40 text-emerald-300'
+                : 'border-emerald-200 bg-emerald-50 text-emerald-800'
             }`}
           >
-            <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
-            <span>Note Generation Settings</span>
+            <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+            <span>Living Tree Preferences</span>
           </div>
         </div>
       </div>
@@ -219,19 +219,17 @@ export default function SettingsView({ onBack, onLogout }: Props) {
       <div className="space-y-6">
         {/* Presets Row */}
         <div
-          className={`rounded-3xl p-6 shadow-3d transition-colors duration-300 ${
-            isDark ? 'glass-panel-elevated' : 'glass-panel-elevated bg-white/95 border-slate-200 shadow-xl'
-          }`}
+          className="rounded-3xl p-6 shadow-3d transition-colors duration-300 glass-panel-elevated"
         >
-          <div className="flex items-center justify-between mb-4 border-b pb-3 border-slate-700/20">
+          <div className="flex items-center justify-between mb-4 border-b pb-3 border-emerald-900/30">
             <div className="flex items-center gap-2">
-              <SlidersHorizontal className="h-4 w-4 text-indigo-500" />
-              <h3 className={`text-sm font-bold font-display uppercase tracking-wider ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Presets
+              <SlidersHorizontal className="h-4 w-4 text-emerald-400" />
+              <h3 className={`text-sm font-bold font-display uppercase tracking-wider ${isDark ? 'text-white' : 'text-emerald-950'}`}>
+                Synthesis Presets
               </h3>
             </div>
-            <span className="text-[11px] font-mono text-slate-400">
-              Active: <strong className="text-indigo-400 capitalize">{settings.preset}</strong>
+            <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400">
+              Active: <strong className="text-emerald-400 capitalize">{settings.preset}</strong>
             </span>
           </div>
 
@@ -245,11 +243,11 @@ export default function SettingsView({ onBack, onLogout }: Props) {
                   className={`flex flex-col items-start rounded-2xl p-3.5 text-left border transition-all hover:scale-[1.02] active:scale-[0.98] ${
                     isSelected
                       ? isDark
-                        ? 'border-indigo-500 bg-indigo-950/50 text-white ring-1 ring-indigo-500/40 shadow-md shadow-indigo-500/10'
-                        : 'border-indigo-500 bg-indigo-50/90 text-indigo-950 ring-1 ring-indigo-500/30 shadow-sm'
+                        ? 'border-emerald-500 bg-emerald-950/70 text-white ring-1 ring-emerald-500/50 shadow-md shadow-emerald-500/20'
+                        : 'border-emerald-500 bg-emerald-100 text-emerald-950 ring-1 ring-emerald-500/40 shadow-sm'
                       : isDark
-                      ? 'border-slate-800 bg-space-card/60 text-slate-300 hover:border-slate-700 hover:bg-space-card'
-                      : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 hover:bg-white'
+                      ? 'border-emerald-900 bg-space-card/60 text-emerald-200/80 hover:border-emerald-700 hover:bg-space-card'
+                      : 'border-emerald-200 bg-emerald-50/50 text-emerald-800 hover:border-emerald-300 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full mb-1">
@@ -257,16 +255,16 @@ export default function SettingsView({ onBack, onLogout }: Props) {
                     <span
                       className={`text-[9px] font-mono px-1.5 py-0.5 rounded-md font-semibold ${
                         isSelected
-                          ? 'bg-indigo-500 text-white'
+                          ? 'bg-emerald-600 text-white'
                           : isDark
-                          ? 'bg-slate-800 text-slate-400'
-                          : 'bg-slate-200 text-slate-600'
+                          ? 'bg-emerald-950 text-emerald-400'
+                          : 'bg-emerald-200 text-emerald-800'
                       }`}
                     >
                       {p.badge}
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-400 leading-snug line-clamp-2">{p.desc}</p>
+                  <p className="text-[10px] text-emerald-600/80 dark:text-emerald-400/70 leading-snug line-clamp-2">{p.desc}</p>
                 </button>
               );
             })}
@@ -809,40 +807,40 @@ export default function SettingsView({ onBack, onLogout }: Props) {
               onClick={() => setTheme('dark')}
               className={`flex items-center justify-between rounded-2xl p-4 border-2 cursor-pointer transition ${
                 isDark
-                  ? 'border-indigo-500 bg-space-card shadow-md shadow-indigo-500/20'
-                  : 'border-slate-200 bg-slate-50 hover:border-slate-300'
+                  ? 'border-emerald-500 bg-space-card shadow-md shadow-emerald-500/20'
+                  : 'border-emerald-200 bg-emerald-50/50 hover:border-emerald-300'
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-950 text-indigo-400 border border-indigo-800/60">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-950 text-emerald-300 border border-emerald-800/60">
                   <Moon className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold font-display text-slate-900 dark:text-white">Space Dark</h4>
-                  <p className="text-[10px] text-slate-400 font-mono">Deep Obsidian & Neon</p>
+                  <h4 className="text-xs font-bold font-display text-emerald-950 dark:text-white">Midnight Bioluminescent</h4>
+                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Deep Forest & Glowing Neon Tree</p>
                 </div>
               </div>
-              {isDark && <Check className="h-4 w-4 text-indigo-400" />}
+              {isDark && <Check className="h-4 w-4 text-emerald-400" />}
             </div>
 
             <div
               onClick={() => setTheme('light')}
               className={`flex items-center justify-between rounded-2xl p-4 border-2 cursor-pointer transition ${
                 !isDark
-                  ? 'border-indigo-500 bg-white shadow-md shadow-indigo-500/20'
-                  : 'border-slate-800 bg-space-card/60 hover:border-slate-700'
+                  ? 'border-emerald-500 bg-white shadow-md shadow-emerald-500/20'
+                  : 'border-emerald-900 bg-space-card/60 hover:border-emerald-700'
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-600 border border-amber-200">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 border border-emerald-200">
                   <Sun className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold font-display text-slate-900 dark:text-white">Luminous Light</h4>
-                  <p className="text-[10px] text-slate-400 font-mono">Clean White & Slate</p>
+                  <h4 className="text-xs font-bold font-display text-emerald-950 dark:text-white">Sunlit Sacred Grove</h4>
+                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Daylight Mist & Crystalline Emerald</p>
                 </div>
               </div>
-              {!isDark && <Check className="h-4 w-4 text-indigo-600" />}
+              {!isDark && <Check className="h-4 w-4 text-emerald-600" />}
             </div>
           </div>
         </div>

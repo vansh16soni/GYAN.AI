@@ -39,15 +39,15 @@ export default function CodeBlock({ language, code, children }: Props) {
             <span className="h-2.5 w-2.5 rounded-full bg-amber-500/60" />
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/60" />
           </div>
-          <div className="flex items-center gap-1 text-[11px] font-mono font-semibold text-indigo-300 ml-1">
-            <Terminal className="h-3 w-3 text-slate-400" />
+          <div className="flex items-center gap-1 text-[11px] font-mono font-semibold text-emerald-400 ml-1">
+            <Terminal className="h-3 w-3 text-emerald-500" />
             <span>{language || 'code'}</span>
           </div>
         </div>
 
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-medium text-slate-300 transition hover:bg-slate-700/60 hover:text-white"
+          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-medium text-emerald-200 transition hover:bg-emerald-950/60 hover:text-white"
         >
           {copied ? (
             <>
@@ -56,7 +56,7 @@ export default function CodeBlock({ language, code, children }: Props) {
             </>
           ) : (
             <>
-              <Copy className="h-3.5 w-3.5 text-indigo-400" />
+              <Copy className="h-3.5 w-3.5 text-emerald-400" />
               <span>Copy</span>
             </>
           )}

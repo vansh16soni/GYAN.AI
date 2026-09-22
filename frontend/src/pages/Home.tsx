@@ -5,7 +5,8 @@ import InputBox from '../components/InputBox';
 import NotesView from '../components/NotesView';
 import SettingsView from '../components/SettingsView';
 import SynthesisProgress from '../components/SynthesisProgress';
-import AntigravityCanvas from '../components/AntigravityCanvas';
+import TreeCanvas from '../components/TreeCanvas';
+import ThemeToggle from '../components/ThemeToggle';
 import { useTheme } from '../context/ThemeContext';
 import { SettingsType, DEFAULT_SETTINGS } from '../config/presets';
 import { NoteSummary, Note, fetchHistory, fetchNote, generateNote, deleteNote, fetchSettings } from '../api';
@@ -137,11 +138,11 @@ export default function Home() {
   return (
     <div
       className={`relative flex h-screen overflow-hidden transition-colors duration-300 ${
-        isDark ? 'bg-space-base text-space-text' : 'bg-slate-50 text-slate-900'
+        isDark ? 'bg-space-base text-space-text' : 'bg-[#d8ece0] text-emerald-950'
       }`}
     >
-      {/* 3D Antigravity Background Canvas */}
-      <AntigravityCanvas interactive={true} opacity={isDark ? 0.7 : 0.55} />
+      {/* 3D Gyan Forest Background Canvas */}
+      <TreeCanvas interactive={true} opacity={0.95} />
 
       {/* Subtle Radial Glow Light Accents */}
       <div className="pointer-events-none absolute inset-0 bg-radial-gradient" />
@@ -160,6 +161,11 @@ export default function Home() {
       />
 
       <main className="relative flex flex-1 flex-col overflow-y-auto bg-transparent">
+        {/* Top Right Floating Theme Toggle Button */}
+        <div className="fixed top-4 right-4 z-30">
+          <ThemeToggle />
+        </div>
+
         {/* Floating Sandwich Toggle Button (when sidebar is collapsed) */}
         {!sidebarOpen && (
           <button
@@ -168,8 +174,8 @@ export default function Home() {
             title="Open sidebar"
             className={`fixed top-4 left-4 z-30 flex h-10 w-10 items-center justify-center rounded-2xl border shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 active:scale-95 ${
               isDark
-                ? 'border-slate-700/60 bg-space-card/90 text-slate-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 shadow-indigo-950/30'
-                : 'border-slate-200 bg-white/90 text-slate-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 shadow-slate-200'
+                ? 'border-emerald-900/80 bg-space-card/90 text-emerald-200 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 shadow-emerald-950/40'
+                : 'border-emerald-200 bg-white/90 text-emerald-800 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 shadow-emerald-200/50'
             }`}
           >
             <Menu className="h-5 w-5" />

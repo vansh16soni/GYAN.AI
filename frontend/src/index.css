@@ -9,23 +9,23 @@
     height: 100%;
     font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
     overflow-x: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
-  /* Dark Theme Base */
+  /* Dark Theme Base: Midnight Bioluminescent Enchanted Forest */
   html.dark,
   html.dark body,
   html.dark #root {
-    background-color: #08090e;
-    color: #e2e8f8;
+    background-color: #030a07;
+    color: #e1f5ec;
   }
 
-  /* Bright/Light Theme Base */
+  /* Bright/Light Theme Base: Soothing Sage & Emerald Grove Mist (Low Whiteness) */
   html.light,
   html.light body,
   html.light #root {
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: #d8ece0;
+    color: #064e3b;
   }
 }
 
@@ -46,148 +46,152 @@
   backface-visibility: hidden;
 }
 
-/* Dark Antigravity Glassmorphism */
+/* Dark Forest Bioluminescent Glassmorphism */
 html.dark .glass-panel {
-  background: rgba(15, 17, 26, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(8, 28, 19, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(52, 211, 153, 0.16);
 }
 
 html.dark .glass-panel-elevated {
-  background: rgba(19, 22, 34, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(99, 102, 241, 0.18);
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5), 0 0 30px -5px rgba(99, 102, 241, 0.12);
+  background: rgba(8, 26, 18, 0.82);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.75), 0 0 35px -5px rgba(16, 185, 129, 0.22);
 }
 
 html.dark .glass-panel-glow {
-  background: rgba(19, 22, 34, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(99, 102, 241, 0.35);
-  box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.25), 0 0 15px -3px rgba(56, 189, 248, 0.2);
+  background: rgba(10, 32, 22, 0.90);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  box-shadow: 0 0 40px -5px rgba(16, 185, 129, 0.35), 0 0 20px -3px rgba(0, 255, 157, 0.25);
 }
 
-/* Bright Light Glassmorphism */
+/* Bright Light Sunlit Grove Glassmorphism (Soft Translucent Jade Mist) */
 html.light .glass-panel {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+  background: rgba(228, 245, 235, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  box-shadow: 0 6px 24px -2px rgba(6, 78, 59, 0.08);
 }
 
 html.light .glass-panel-elevated {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
+  background: rgba(232, 247, 239, 0.82);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.18), 0 4px 14px rgba(6, 78, 59, 0.08);
 }
 
 html.light .glass-panel-glow {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  box-shadow: 0 12px 36px -4px rgba(99, 102, 241, 0.15), 0 0 20px -3px rgba(56, 189, 248, 0.15);
+  background: rgba(238, 250, 243, 0.90);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  box-shadow: 0 12px 36px -4px rgba(16, 185, 129, 0.25), 0 0 30px -3px rgba(52, 211, 153, 0.25);
 }
 
 /* Subtle 3D Depth Shadows */
 html.dark .shadow-3d {
   box-shadow: 
-    0 1px 2px rgba(0, 0, 0, 0.2),
-    0 8px 16px -4px rgba(0, 0, 0, 0.4),
-    0 24px 48px -12px rgba(0, 0, 0, 0.6),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 8px 20px -4px rgba(0, 0, 0, 0.6),
+    0 24px 48px -12px rgba(0, 0, 0, 0.8),
+    inset 0 1px 1px rgba(110, 231, 183, 0.12);
 }
 
 html.light .shadow-3d {
   box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    0 10px 25px -5px rgba(99, 102, 241, 0.08),
-    0 20px 48px -12px rgba(0, 0, 0, 0.06),
-    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    0 1px 3px rgba(6, 78, 59, 0.08),
+    0 10px 25px -5px rgba(16, 185, 129, 0.15),
+    0 20px 48px -12px rgba(6, 78, 59, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
 }
 
-html.dark .shadow-neon-indigo {
-  box-shadow: 0 0 25px -3px rgba(99, 102, 241, 0.35), 0 0 10px -2px rgba(56, 189, 248, 0.2);
+html.dark .shadow-neon-emerald {
+  box-shadow: 0 0 30px -3px rgba(16, 185, 129, 0.45), 0 0 12px -2px rgba(0, 255, 157, 0.3);
 }
 
-html.light .shadow-neon-indigo {
-  box-shadow: 0 0 25px -3px rgba(99, 102, 241, 0.2), 0 4px 12px rgba(56, 189, 248, 0.1);
+html.light .shadow-neon-emerald {
+  box-shadow: 0 0 30px -3px rgba(16, 185, 129, 0.32), 0 4px 18px rgba(52, 211, 153, 0.22);
 }
 
-/* Antigravity Radial Glow Backdrops */
+/* Gyan Tree Forest Radial Glow Backdrops */
 html.dark .bg-radial-gradient {
-  background: radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.15) 0%, rgba(56, 189, 248, 0.05) 45%, transparent 70%);
+  background: radial-gradient(circle at 50% 35%, rgba(16, 185, 129, 0.16) 0%, rgba(5, 150, 105, 0.08) 40%, rgba(3, 10, 7, 0) 75%);
 }
 
 html.light .bg-radial-gradient {
-  background: radial-gradient(circle at 50% 25%, rgba(99, 102, 241, 0.1) 0%, rgba(56, 189, 248, 0.06) 45%, transparent 70%);
+  background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.24) 0%, rgba(52, 211, 153, 0.12) 45%, rgba(216, 236, 224, 0) 75%);
 }
 
-/* Custom Scrollbar */
+/* Custom Forest Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 html.dark ::-webkit-scrollbar-track {
-  background: rgba(8, 9, 14, 0.5);
+  background: rgba(3, 10, 7, 0.6);
 }
 
 html.dark ::-webkit-scrollbar-thumb {
-  background: #1f2438;
+  background: #164330;
   border-radius: 9999px;
 }
 
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
 html.light ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f0fdf4;
 }
 
 html.light ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #a7f3d0;
   border-radius: 9999px;
 }
 
 html.light ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #34d399;
 }
 
-/* Shimmer gradient text */
+/* Shimmer gradient text: Emerald, Jade & Mint */
 html.dark .text-shimmer {
   background: linear-gradient(
     90deg,
     #ffffff 0%,
-    #a5b4fc 25%,
-    #38bdf8 50%,
-    #c7d2fe 75%,
+    #6ee7b7 25%,
+    #00ff9d 50%,
+    #a7f3d0 75%,
     #ffffff 100%
   );
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: shimmer 8s linear infinite;
+  animation: shimmer 7s linear infinite;
 }
 
 html.light .text-shimmer {
   background: linear-gradient(
     90deg,
-    #4338ca 0%,
-    #6366f1 25%,
-    #0284c7 50%,
-    #4f46e5 75%,
-    #4338ca 100%
+    #065f46 0%,
+    #059669 25%,
+    #0d9488 50%,
+    #10b981 75%,
+    #065f46 100%
   );
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: shimmer 8s linear infinite;
+  animation: shimmer 7s linear infinite;
 }
 
 @keyframes shimmer {
@@ -198,11 +202,11 @@ html.light .text-shimmer {
 @keyframes pulseGlow {
   0%, 100% {
     transform: scale(1);
-    opacity: 0.5;
+    opacity: 0.45;
   }
   50% {
     transform: scale(1.08);
-    opacity: 0.85;
+    opacity: 0.9;
   }
 }
 
@@ -217,10 +221,11 @@ html.light .text-shimmer {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.99);
+    transform: translateY(14px) scale(0.99);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
+

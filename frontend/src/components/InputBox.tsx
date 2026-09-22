@@ -85,38 +85,49 @@ export default function InputBox({
 
   return (
     <div className="w-full max-w-3xl px-4 animate-fade-in-up relative z-10">
-      {/* Top Formal Antigravity Brand Hero */}
-      <div className="mb-6 text-center">
+      {/* Top Formal Gyan Forest Brand Hero with Rich Frosted Glassmorphism */}
+      <div className="relative mb-6 text-center rounded-3xl p-6 sm:p-8 shadow-3d glass-panel-elevated overflow-hidden transition-all duration-300">
+        {/* Top Edge Ambient Light Filament */}
+        <div className="absolute top-0 left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/80 to-transparent" />
+
         <div
-          className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-mono mb-4 backdrop-blur-md border transition-colors ${
+          className={`inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-mono mb-4 backdrop-blur-md border transition-colors ${
             isDark
-              ? 'border-indigo-500/30 bg-indigo-950/40 text-indigo-300 shadow-sm'
-              : 'border-indigo-200 bg-indigo-50/90 text-indigo-700 shadow-sm'
+              ? 'border-emerald-500/40 bg-emerald-950/70 text-emerald-300 shadow-sm'
+              : 'border-emerald-300 bg-white/85 text-emerald-900 shadow-sm'
           }`}
         >
-          <span className="flex h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
-          <span className={`font-semibold tracking-wide ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            ANTIGRAVITY NOTE ENGINE
+          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className={`font-semibold tracking-wide ${isDark ? 'text-white' : 'text-emerald-950'}`}>
+            GYAN TREE • 3D NEURAL SYNTHESIS
           </span>
-          <span className={isDark ? 'text-indigo-400/80' : 'text-indigo-600'}>• v2.4</span>
+          <span className={isDark ? 'text-emerald-400/90 font-medium' : 'text-emerald-700 font-semibold'}>
+            • Forest Core
+          </span>
         </div>
 
         <h1
           className={`text-3xl font-extrabold tracking-tight sm:text-5xl font-display leading-[1.15] ${
-            isDark ? 'text-white' : 'text-slate-900'
+            isDark
+              ? 'text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]'
+              : 'text-emerald-950 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]'
           }`}
         >
-          Synthesize Structured Knowledge{' '}
-          <span className="text-shimmer">at the Speed of Thought</span>
+          Branch Out Knowledge{' '}
+          <span className={`text-shimmer ${isDark ? 'drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]' : ''}`}>
+            through the Living Neural Tree
+          </span>
         </h1>
 
         <p
-          className={`mx-auto mt-3 max-w-xl text-sm leading-relaxed ${
-            isDark ? 'text-slate-400' : 'text-slate-600'
+          className={`mx-auto mt-3 max-w-xl text-sm leading-relaxed font-medium ${
+            isDark
+              ? 'text-emerald-100/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]'
+              : 'text-emerald-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.7)]'
           }`}
         >
-          Input any technical concept, system topic, or YouTube URL. Get high-density markdown notes,
-          algorithmic complexity breakdowns, and interactive Mermaid diagrams.
+          Grow deep technical understanding from any concept or lecture URL. Experience living 3D notes,
+          algorithmic complexity graphs, and interactive architectural diagrams.
         </p>
 
         {/* Synthesis Mode Pills */}
@@ -129,12 +140,12 @@ export default function InputBox({
                 key={mode.id}
                 type="button"
                 onClick={() => setSelectedMode(mode.id)}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-medium transition-all ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
                   isSelected
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25 border border-indigo-400/50'
+                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/30 border border-emerald-400/50'
                     : isDark
-                    ? 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
-                    : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-sm'
+                    ? 'bg-space-card/90 text-emerald-200 hover:text-white border border-emerald-900/70 hover:border-emerald-600'
+                    : 'bg-white/80 text-emerald-900 hover:text-emerald-950 border border-emerald-300 hover:border-emerald-400 shadow-sm'
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />
@@ -148,11 +159,11 @@ export default function InputBox({
       {/* Compact Settings Summary Badge Above Input */}
       {onOpenSettings && (
         <div className="mb-3 flex items-center justify-between px-2 text-xs">
-          <div className="flex items-center gap-2 text-slate-400">
-            <SlidersHorizontal className="h-3.5 w-3.5 text-indigo-500" />
+          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
+            <SlidersHorizontal className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>
               Using:{' '}
-              <strong className="capitalize text-slate-300 dark:text-white font-medium">
+              <strong className="capitalize text-emerald-950 dark:text-emerald-100 font-medium">
                 {presetName} preset
               </strong>{' '}
               · <span className="capitalize">{languageName}</span> ·{' '}
@@ -162,20 +173,17 @@ export default function InputBox({
           <button
             type="button"
             onClick={onOpenSettings}
-            className="text-indigo-400 hover:text-indigo-300 text-xs font-semibold underline underline-offset-2 transition"
+            className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 text-xs font-semibold underline underline-offset-2 transition"
           >
             Change
           </button>
         </div>
       )}
 
-      {/* Main 3D Elevated Glass Input Card */}
+      {/* Main 3D Elevated Forest Glass Input Card */}
       <div
-        className={`rounded-3xl p-4 shadow-3d transition-all focus-within:border-indigo-500/80 focus-within:shadow-neon-indigo ${
-          isDark ? 'glass-panel-elevated' : 'glass-panel-elevated bg-white/90 border-indigo-200'
-        }`}
+        className={`rounded-3xl p-4 shadow-3d transition-all focus-within:border-emerald-500/80 focus-within:shadow-neon-emerald glass-panel-elevated`}
       >
-
         <textarea
           ref={ref}
           rows={1}
@@ -185,27 +193,27 @@ export default function InputBox({
           placeholder="Enter a topic or paste a YouTube URL (e.g. Distributed Consensus, Raft, or MIT OpenCourseWare link)..."
           className={`max-h-[160px] min-h-[56px] w-full resize-none bg-transparent px-3 py-2 text-sm outline-none leading-relaxed font-sans ${
             isDark
-              ? 'text-white placeholder:text-slate-500'
-              : 'text-slate-900 placeholder:text-slate-400'
+              ? 'text-white placeholder:text-emerald-200/40'
+              : 'text-emerald-950 placeholder:text-emerald-800/50'
           }`}
         />
 
         <div
           className={`flex flex-wrap items-center justify-between gap-3 border-t pt-3 px-2 ${
-            isDark ? 'border-slate-800/80' : 'border-slate-200'
+            isDark ? 'border-emerald-900/50' : 'border-emerald-300/40'
           }`}
         >
           <div
             className={`flex items-center gap-3 text-xs font-mono ${
-              isDark ? 'text-slate-500' : 'text-slate-500'
+              isDark ? 'text-emerald-300/70' : 'text-emerald-800'
             }`}
           >
             <div className="flex items-center gap-1">
               <kbd
                 className={`rounded px-1.5 py-0.5 text-[11px] border ${
                   isDark
-                    ? 'bg-slate-800 text-slate-300 border-slate-700'
-                    : 'bg-slate-100 text-slate-700 border-slate-300 shadow-inner'
+                    ? 'bg-space-card text-emerald-200 border-emerald-800'
+                    : 'bg-emerald-100/90 text-emerald-900 border-emerald-300/80 shadow-inner'
                 }`}
               >
                 Enter ↵
@@ -213,23 +221,23 @@ export default function InputBox({
               <span>to synthesize</span>
             </div>
             <span className="hidden sm:inline opacity-40">•</span>
-            <span className="hidden sm:inline">Markdown + Mermaid output</span>
+            <span className="hidden sm:inline">Living Gyan Tree synthesis</span>
           </div>
 
           <button
             onClick={onSubmit}
             disabled={!value.trim() || loading}
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-sky-500 px-5 py-2.5 text-xs font-bold text-white transition-all hover:shadow-lg hover:shadow-indigo-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 px-5 py-2.5 text-xs font-bold text-white transition-all hover:shadow-lg hover:shadow-emerald-500/35 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {loading ? (
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                <span>Synthesizing…</span>
+                <span>Nourishing Tree…</span>
               </>
             ) : (
               <>
-                <Sparkles className="h-4 w-4 text-cyan-200 transition-transform group-hover:rotate-12" />
-                <span>Generate Notes</span>
+                <Sparkles className="h-4 w-4 text-emerald-200 transition-transform group-hover:rotate-12" />
+                <span>Grow Tree Notes</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </>
             )}
@@ -242,71 +250,62 @@ export default function InputBox({
         <div className="mb-3 flex items-center justify-between px-1">
           <span
             className={`text-xs font-mono font-semibold uppercase tracking-wider flex items-center gap-1.5 ${
-              isDark ? 'text-slate-400' : 'text-slate-500'
+              isDark ? 'text-emerald-400' : 'text-emerald-800 font-bold'
             }`}
           >
-            <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
+            <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
             Curated Synthesis Blueprints
           </span>
-          <span className="text-[11px] font-mono text-slate-400">Click to load</span>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {SUGGESTIONS.map((item) => {
-            const Icon = item.icon;
+          {SUGGESTIONS.map((s, idx) => {
+            const Icon = s.icon;
             return (
               <TiltCard
-                key={item.title}
-                tiltDegree={8}
-                onClick={() => onChange(item.prompt)}
-                glowColor={isDark ? 'rgba(99, 102, 241, 0.25)' : 'rgba(99, 102, 241, 0.15)'}
-                className={`cursor-pointer p-3.5 transition-all text-left group ${
+                key={idx}
+                onClick={() => {
+                  onChange(s.prompt);
+                  if (ref.current) ref.current.focus();
+                }}
+                className={`group cursor-pointer rounded-2xl p-3.5 transition-all text-left border ${
                   isDark
-                    ? 'glass-panel border-slate-800/80 hover:border-indigo-500/50 hover:bg-slate-900/60'
-                    : 'glass-panel bg-white/80 border-slate-200 hover:border-indigo-400 hover:bg-white shadow-sm'
+                    ? 'border-emerald-900/60 bg-space-card/70 hover:border-emerald-500/50 hover:bg-space-cardHover shadow-3d hover:shadow-neon-emerald'
+                    : 'border-emerald-300/60 bg-[#e2f3e8]/75 hover:border-emerald-400 hover:bg-[#eaf7ef]/90 shadow-sm hover:shadow-md'
                 }`}
               >
-                <div className="flex items-start gap-3">
-                  <div
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all ${
-                      isDark
-                        ? 'bg-indigo-950/60 border border-indigo-800/40 text-cyan-400 group-hover:scale-105'
-                        : 'bg-indigo-50 border border-indigo-100 text-indigo-600 group-hover:scale-105'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-1 mb-1">
-                      <h4
-                        className={`text-xs font-bold truncate font-display ${
-                          isDark
-                            ? 'text-slate-200 group-hover:text-white'
-                            : 'text-slate-800 group-hover:text-indigo-600'
-                        }`}
-                      >
-                        {item.title}
-                      </h4>
-                      <span
-                        className={`shrink-0 text-[10px] font-mono px-2 py-0.5 rounded-full border ${
-                          isDark
-                            ? 'bg-slate-800 text-indigo-300 border-slate-700/60'
-                            : 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                        }`}
-                      >
-                        {item.badge}
-                      </span>
-                    </div>
-                    <p
-                      className={`text-[11px] line-clamp-2 leading-relaxed ${
-                        isDark ? 'text-slate-400' : 'text-slate-500'
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className={`flex h-7 w-7 items-center justify-center rounded-xl transition-colors ${
+                        isDark
+                          ? 'bg-emerald-950 text-emerald-300 group-hover:bg-emerald-600 group-hover:text-white'
+                          : 'bg-emerald-100 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white'
                       }`}
                     >
-                      {item.desc}
-                    </p>
+                      <Icon className="h-3.5 w-3.5" />
+                    </div>
+                    <span className="text-xs font-bold font-display text-emerald-950 dark:text-emerald-100 group-hover:text-emerald-400 transition-colors line-clamp-1">
+                      {s.title}
+                    </span>
                   </div>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[9px] font-mono font-bold uppercase shrink-0 border ${
+                      isDark
+                        ? 'border-emerald-800 bg-emerald-950/70 text-emerald-300'
+                        : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                    }`}
+                  >
+                    {s.badge}
+                  </span>
                 </div>
+                <p
+                  className={`mt-2 text-[11px] line-clamp-2 leading-relaxed ${
+                    isDark ? 'text-emerald-300/70' : 'text-emerald-800/80'
+                  }`}
+                >
+                  {s.desc}
+                </p>
               </TiltCard>
             );
           })}

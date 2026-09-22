@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Sparkles, Brain, Cpu, Network, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Brain, Cpu, Network, CheckCircle2, TreePine } from 'lucide-react';
 
 const STEPS = [
-  { label: 'Ingesting & Tokenizing Query', icon: Cpu },
-  { label: 'Constructing Semantic Knowledge Graph', icon: Network },
-  { label: 'Synthesizing Technical Markdown Notes', icon: Brain },
-  { label: 'Compiling Mermaid Architectural DAG', icon: Sparkles },
+  { label: 'Grounding Root Ingestion & Query Parse', icon: Cpu },
+  { label: 'Spreading Living Neural Branches', icon: Network },
+  { label: 'Synthesizing Crystalline Foliage Notes', icon: Brain },
+  { label: 'Generating Interactive Architectural Graphs', icon: Sparkles },
 ];
 
 export default function SynthesisProgress() {
@@ -32,28 +32,28 @@ export default function SynthesisProgress() {
       {/* 3D Revolving Holographic Radar */}
       <div className="relative mb-6 flex h-24 w-24 items-center justify-center">
         {/* Outer orbital rings */}
-        <div className="absolute inset-0 rounded-full border border-indigo-500/30 animate-spin-slow" />
-        <div className="absolute inset-1 rounded-full border border-dashed border-cyan-400/40 animate-spin" style={{ animationDuration: '8s' }} />
-        <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-indigo-600/20 via-sky-400/10 to-transparent blur-md animate-pulse-glow" />
+        <div className="absolute inset-0 rounded-full border border-emerald-500/30 animate-spin-slow" />
+        <div className="absolute inset-1 rounded-full border border-dashed border-teal-400/40 animate-spin" style={{ animationDuration: '8s' }} />
+        <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-emerald-600/20 via-teal-400/10 to-transparent blur-md animate-pulse-glow" />
 
         {/* Central Pulsing 3D Node */}
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-sky-400 text-white shadow-lg shadow-indigo-500/40">
-          <Brain className="h-7 w-7 animate-pulse text-white" />
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 text-white shadow-lg shadow-emerald-500/40">
+          <TreePine className="h-7 w-7 animate-pulse text-white" />
         </div>
       </div>
 
       {/* Title & Badge */}
-      <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-950/60 px-3.5 py-1 text-xs font-mono text-indigo-300 mb-3 shadow-inner">
-        <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-ping" />
-        <span>NEURAL SYNTHESIS PIPELINE</span>
-        <span className="text-slate-400">• {seconds}s</span>
+      <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/60 px-3.5 py-1 text-xs font-mono text-emerald-300 mb-3 shadow-inner">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
+        <span>GYAN TREE SYNTHESIS PIPELINE</span>
+        <span className="text-emerald-400/70">• {seconds}s</span>
       </div>
 
       <h3 className="text-xl font-extrabold text-white tracking-tight sm:text-2xl font-display">
-        Synthesizing Comprehensive Notes
+        Growing High-Density Knowledge Tree
       </h3>
-      <p className="mt-1 text-xs text-slate-400 font-mono">
-        Leveraging Antigravity Deep Note Reasoning & Schema Extraction
+      <p className="mt-1 text-xs text-emerald-300/80 font-mono">
+        Extracting Deep Structural Reasoning & Syntactic Leaves
       </p>
 
       {/* Pipeline Step Sequence */}
@@ -68,10 +68,10 @@ export default function SynthesisProgress() {
               key={step.label}
               className={`flex items-center gap-3 rounded-xl border p-2.5 transition-all duration-300 ${
                 isCurrent
-                  ? 'border-indigo-500/60 bg-indigo-950/40 text-indigo-200 shadow-md shadow-indigo-900/30'
+                  ? 'border-emerald-500/60 bg-emerald-950/50 text-emerald-200 shadow-md shadow-emerald-900/40'
                   : isDone
-                  ? 'border-slate-800/80 bg-slate-900/30 text-slate-300'
-                  : 'border-transparent bg-slate-900/10 text-slate-600'
+                  ? 'border-emerald-900/80 bg-space-card/40 text-emerald-300'
+                  : 'border-transparent bg-space-card/10 text-emerald-600'
               }`}
             >
               <div
@@ -79,8 +79,8 @@ export default function SynthesisProgress() {
                   isDone
                     ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                     : isCurrent
-                    ? 'bg-indigo-500/20 text-cyan-300 border border-cyan-400/40 animate-pulse'
-                    : 'bg-slate-800/50 text-slate-600'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 animate-pulse'
+                    : 'bg-space-card text-emerald-700'
                 }`}
               >
                 {isDone ? (
@@ -97,7 +97,7 @@ export default function SynthesisProgress() {
               </div>
 
               {isCurrent && (
-                <div className="h-2 w-2 rounded-full bg-cyan-400 animate-ping shrink-0" />
+                <div className="h-2 w-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
               )}
             </div>
           );

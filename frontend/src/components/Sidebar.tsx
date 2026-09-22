@@ -74,7 +74,7 @@ export default function Sidebar({
     }
   }
 
-  let userName = 'Antigravity User';
+  let userName = 'Tree User';
   let userEmail = 'user@gyan.ai';
   try {
     const stored = localStorage.getItem('user');
@@ -104,30 +104,30 @@ export default function Sidebar({
             : 'w-0 -translate-x-full md:translate-x-0 md:w-0 opacity-0 pointer-events-none border-r-0'
         } ${
           isDark
-            ? 'border-slate-800/80 bg-space-sidebar text-slate-200'
-            : 'border-slate-200 bg-white/95 text-slate-800 backdrop-blur-md'
+            ? 'border-emerald-900/70 bg-space-sidebar text-slate-200'
+            : 'border-emerald-200/80 bg-[#d8ece0]/85 text-emerald-950 backdrop-blur-xl'
         }`}
       >
         <div className="w-72 flex flex-col h-full overflow-hidden">
           {/* Brand & New note header */}
-          <div className={`p-4 border-b ${isDark ? 'border-slate-800/70' : 'border-slate-200'}`}>
+          <div className={`p-4 border-b ${isDark ? 'border-emerald-900/60' : 'border-emerald-100'}`}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="relative flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 text-white shadow-md shadow-indigo-500/25">
+                <div className="relative flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 text-white shadow-md shadow-emerald-500/25">
                   <Sparkles className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <h1
                     className={`text-base font-extrabold tracking-tight leading-tight flex items-center gap-1 font-display ${
-                      isDark ? 'text-white' : 'text-slate-900'
+                      isDark ? 'text-white' : 'text-emerald-950'
                     }`}
                   >
-                    gyan<span className="text-indigo-500">.ai</span>
+                    gyan<span className="text-emerald-500">.ai</span>
                   </h1>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <p className="text-[10px] text-slate-400 font-mono font-medium tracking-wider uppercase">
-                      Antigravity Core
+                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-medium tracking-wider uppercase">
+                      Living Tree Core
                     </p>
                   </div>
                 </div>
@@ -141,8 +141,8 @@ export default function Sidebar({
                   title="Collapse sidebar"
                   className={`rounded-xl p-2 transition-all duration-200 hover:scale-105 active:scale-95 ${
                     isDark
-                      ? 'text-slate-400 hover:bg-slate-800/80 hover:text-white'
-                      : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                      ? 'text-emerald-300 hover:bg-space-card hover:text-white'
+                      : 'text-emerald-700 hover:bg-emerald-100 hover:text-emerald-950'
                   }`}
                 >
                   <Menu className="h-4 w-4" />
@@ -153,15 +153,15 @@ export default function Sidebar({
         {/* Action Button: New Synthesis */}
         <button
           onClick={onNew}
-          className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 px-3.5 py-2.5 text-xs font-bold text-white transition-all hover:shadow-lg hover:shadow-indigo-500/25 active:scale-[0.98]"
+          className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 px-3.5 py-2.5 text-xs font-bold text-white transition-all hover:shadow-lg hover:shadow-emerald-500/30 active:scale-[0.98]"
         >
           <Plus className="h-4 w-4 transition-transform group-hover:rotate-90" />
-          <span className="font-display">New Note Synthesis</span>
+          <span className="font-display">New Tree Synthesis</span>
         </button>
 
         {/* Quick Search */}
         <div className="relative mt-3">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
           <input
             type="text"
             value={search}
@@ -169,8 +169,8 @@ export default function Sidebar({
             placeholder="Search notes..."
             className={`w-full rounded-xl border py-1.5 pl-8 pr-3 text-xs outline-none transition ${
               isDark
-                ? 'border-slate-800 bg-space-card/80 text-white placeholder:text-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'
-                : 'border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500'
+                ? 'border-emerald-900/80 bg-space-card text-white placeholder:text-emerald-300/40 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
+                : 'border-emerald-200 bg-emerald-50/70 text-emerald-950 placeholder:text-emerald-700/50 focus:border-emerald-500 focus:bg-white focus:ring-1 focus:ring-emerald-500'
             }`}
           />
         </div>
@@ -202,21 +202,21 @@ export default function Sidebar({
                 className={`group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-left text-xs transition cursor-pointer border ${
                   isActive
                     ? isDark
-                      ? 'bg-indigo-950/50 border-indigo-500/40 text-white font-medium shadow-sm'
-                      : 'bg-indigo-50/90 border-indigo-200 text-indigo-950 font-semibold shadow-sm'
+                      ? 'bg-emerald-950/70 border-emerald-500/50 text-white font-medium shadow-sm'
+                      : 'bg-emerald-100/90 border-emerald-300 text-emerald-950 font-semibold shadow-sm'
                     : isDark
-                    ? 'border-transparent text-slate-300 hover:bg-space-card hover:text-white hover:border-slate-800'
-                    : 'border-transparent text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 hover:border-slate-200'
+                    ? 'border-transparent text-emerald-200/80 hover:bg-space-card hover:text-white hover:border-emerald-900/60'
+                    : 'border-transparent text-emerald-800/80 hover:bg-emerald-100/60 hover:text-emerald-950 hover:border-emerald-200'
                 }`}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-r-full bg-indigo-500 shadow-sm shadow-indigo-500/50" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-r-full bg-emerald-400 shadow-sm shadow-emerald-400/60" />
                 )}
                 <div className="min-w-0 flex-1 pr-2 pl-1">
                   <div className="truncate text-xs font-semibold font-display">
                     {n.title || n.input}
                   </div>
-                  <div className="truncate text-[10px] text-slate-400 font-mono mt-0.5">
+                  <div className="truncate text-[10px] text-emerald-600/70 dark:text-emerald-400/60 font-mono mt-0.5">
                     {relativeDate(n.createdAt)}
                   </div>
                 </div>
@@ -230,8 +230,8 @@ export default function Sidebar({
                       isConfirming
                         ? 'bg-rose-500/20 text-rose-500 border border-rose-500/40 opacity-100'
                         : isDark
-                        ? 'opacity-0 group-hover:opacity-100 text-slate-400 hover:bg-slate-800 hover:text-rose-400'
-                        : 'opacity-0 group-hover:opacity-100 text-slate-400 hover:bg-slate-200 hover:text-rose-500'
+                        ? 'opacity-0 group-hover:opacity-100 text-emerald-400 hover:bg-space-card hover:text-rose-400'
+                        : 'opacity-0 group-hover:opacity-100 text-emerald-600 hover:bg-emerald-200 hover:text-rose-500'
                     }`}
                   >
                     {isConfirming ? (
@@ -244,8 +244,8 @@ export default function Sidebar({
                   <ChevronRight
                     className={`h-3.5 w-3.5 transition-transform ${
                       isActive
-                        ? 'text-indigo-500'
-                        : 'text-slate-400 opacity-0 group-hover:opacity-100'
+                        ? 'text-emerald-500'
+                        : 'text-emerald-400 opacity-0 group-hover:opacity-100'
                     }`}
                   />
                 </div>
@@ -258,7 +258,7 @@ export default function Sidebar({
       {/* Footer / Settings Navigation & User Profile */}
       <div
         className={`border-t p-3 transition-colors duration-300 ${
-          isDark ? 'border-slate-800/80 bg-space-base' : 'border-slate-200 bg-slate-50'
+          isDark ? 'border-emerald-900/60 bg-space-base' : 'border-emerald-100 bg-emerald-50/80'
         }`}
       >
         {/* Settings & Profile Entry Button */}
@@ -267,19 +267,19 @@ export default function Sidebar({
           className={`group w-full flex items-center justify-between rounded-2xl p-2.5 transition-all text-left border mb-2 ${
             isSettingsActive
               ? isDark
-                ? 'bg-indigo-950/60 border-indigo-500/50 text-white shadow-md shadow-indigo-500/10'
-                : 'bg-indigo-50 border-indigo-200 text-indigo-950 shadow-sm'
+                ? 'bg-emerald-950/80 border-emerald-500/60 text-white shadow-md shadow-emerald-500/20'
+                : 'bg-emerald-100 border-emerald-300 text-emerald-950 shadow-sm'
               : isDark
-              ? 'border-slate-800/80 bg-space-card/60 hover:bg-space-card hover:border-slate-700 text-slate-300 hover:text-white'
-              : 'border-slate-200 bg-white/80 hover:bg-white hover:border-indigo-200 text-slate-700 hover:text-indigo-900'
+              ? 'border-emerald-900/60 bg-space-card/70 hover:bg-space-card hover:border-emerald-700 text-emerald-200 hover:text-white'
+              : 'border-emerald-200 bg-white/90 hover:bg-white hover:border-emerald-300 text-emerald-800 hover:text-emerald-950'
           }`}
         >
           <div className="flex items-center gap-2.5 min-w-0">
             <div
               className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-bold font-mono uppercase shadow-sm ${
                 isDark
-                  ? 'bg-gradient-to-tr from-indigo-900 to-indigo-700 text-cyan-300 border border-indigo-600/40'
-                  : 'bg-gradient-to-tr from-indigo-100 to-indigo-50 text-indigo-700 border border-indigo-200'
+                  ? 'bg-gradient-to-tr from-emerald-900 to-emerald-700 text-emerald-200 border border-emerald-600/40'
+                  : 'bg-gradient-to-tr from-emerald-200 to-emerald-100 text-emerald-800 border border-emerald-200'
               }`}
             >
               {userName.charAt(0)}
@@ -290,9 +290,9 @@ export default function Sidebar({
                   {userName}
                 </p>
               </div>
-              <p className="truncate text-[10px] font-mono text-slate-400 flex items-center gap-1 mt-0.5">
-                <Settings className={`h-2.5 w-2.5 ${isSettingsActive ? 'text-indigo-400 animate-spin-slow' : 'text-slate-400'}`} />
-                Settings & Details
+              <p className="truncate text-[10px] font-mono text-emerald-600 dark:text-emerald-400/80 flex items-center gap-1 mt-0.5">
+                <Settings className={`h-2.5 w-2.5 ${isSettingsActive ? 'text-emerald-400 animate-spin-slow' : 'text-emerald-500'}`} />
+                Tree Configuration
               </p>
             </div>
           </div>
@@ -301,25 +301,25 @@ export default function Sidebar({
             <span
               className={`rounded-full px-1.5 py-0.5 text-[9px] font-mono uppercase font-bold border ${
                 isDark
-                  ? 'border-indigo-800/60 bg-indigo-950/80 text-cyan-300'
-                  : 'border-indigo-200 bg-indigo-50 text-indigo-700'
+                  ? 'border-emerald-800/80 bg-emerald-950/80 text-emerald-300'
+                  : 'border-emerald-200 bg-emerald-100 text-emerald-800'
               }`}
             >
               {theme}
             </span>
             <ChevronRight
               className={`h-3.5 w-3.5 transition-transform ${
-                isSettingsActive ? 'text-indigo-500 translate-x-0.5' : 'text-slate-400 group-hover:translate-x-0.5'
+                isSettingsActive ? 'text-emerald-400 translate-x-0.5' : 'text-emerald-400 group-hover:translate-x-0.5'
               }`}
             />
           </div>
         </button>
 
         {/* Quick Logout & Active Session Footer info */}
-        <div className="flex items-center justify-between px-1.5 pt-1 text-[10px] font-mono text-slate-400">
+        <div className="flex items-center justify-between px-1.5 pt-1 text-[10px] font-mono text-emerald-600 dark:text-emerald-400/70">
           <div className="flex items-center gap-1">
             <ShieldCheck className="h-3 w-3 text-emerald-400" />
-            <span>Active Session</span>
+            <span>Living Session</span>
           </div>
           <button
             onClick={onLogout}

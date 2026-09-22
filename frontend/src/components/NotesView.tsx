@@ -61,10 +61,10 @@ export default function NotesView({ title, content, inputType, input, onNew, onD
     await navigator.clipboard.writeText(`# ${title}\n\n${displayContent}`);
     setCopiedAll(true);
     confetti({
-      particleCount: 30,
-      spread: 60,
+      particleCount: 40,
+      spread: 70,
       origin: { y: 0.2 },
-      colors: ['#6366f1', '#38bdf8', '#a855f7'],
+      colors: ['#10b981', '#34d399', '#6ee7b7', '#00ff9d'],
     });
     setTimeout(() => setCopiedAll(false), 2000);
   }
@@ -93,111 +93,87 @@ export default function NotesView({ title, content, inputType, input, onNew, onD
     <div className="animate-fade-in-up mx-auto w-full max-w-4xl px-4 py-8 sm:px-8 relative z-10">
       {/* 3D Glassmorphic Top Action Dock */}
       <div
-        className={`mb-8 rounded-3xl p-6 shadow-3d transition-colors duration-300 ${
-          isDark ? 'glass-panel-elevated' : 'glass-panel-elevated bg-white/95 border-slate-200'
-        }`}
+        className={`mb-8 rounded-3xl p-6 shadow-3d transition-colors duration-300 glass-panel-elevated`}
       >
-        <div
-          className={`flex flex-wrap items-center justify-between gap-4 border-b pb-5 ${
-            isDark ? 'border-slate-800/80' : 'border-slate-200'
-          }`}
-        >
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              {inputType === 'url' ? (
-                <span
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-xs font-mono font-medium border ${
-                    isDark
-                      ? 'border-rose-500/30 bg-rose-950/40 text-rose-300'
-                      : 'border-rose-200 bg-rose-50 text-rose-700'
-                  }`}
-                >
-                  <Video className="h-3 w-3 text-rose-500" />
-                  YouTube Transcript Synthesis
-                </span>
-              ) : (
-                <span
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-xs font-mono font-medium border ${
-                    isDark
-                      ? 'border-indigo-500/30 bg-indigo-950/40 text-cyan-300'
-                      : 'border-indigo-200 bg-indigo-50 text-indigo-700'
-                  }`}
-                >
-                  <Sparkles className="h-3 w-3 text-indigo-500" />
-                  Antigravity Topic Note
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-mono uppercase font-bold border ${
+                  isDark
+                    ? 'border-emerald-800 bg-emerald-950/70 text-emerald-300'
+                    : 'border-emerald-300/80 bg-emerald-100/80 text-emerald-900'
+                }`}
+              >
+                {inputType === 'url' ? (
+                  <>
+                    <Video className="h-3 w-3" />
+                    <span>Video Synthesis</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-3 w-3" />
+                    <span>Concept Tree</span>
+                  </>
+                )}
+              </span>
+
+              {input && (
+                <span className="truncate text-xs text-emerald-800/80 dark:text-emerald-400/60 font-mono">
+                  {input}
                 </span>
               )}
             </div>
 
             <h1
-              className={`text-2xl font-extrabold tracking-tight sm:text-3xl font-display ${
-                isDark ? 'text-white' : 'text-slate-900'
+              className={`text-xl font-extrabold sm:text-2xl font-display tracking-tight leading-snug ${
+                isDark ? 'text-white' : 'text-emerald-950'
               }`}
             >
               {title}
             </h1>
-
-            {input && (
-              <p
-                className={`text-xs font-mono mt-1.5 truncate max-w-xl ${
-                  isDark ? 'text-slate-400' : 'text-slate-500'
-                }`}
-              >
-                Source Reference:{' '}
-                <span className={isDark ? 'text-slate-300 font-sans' : 'text-slate-700 font-sans'}>
-                  {input}
-                </span>
-              </p>
-            )}
           </div>
 
-          {/* Action Toolbar */}
-          <div className="flex items-center flex-wrap gap-2">
-            <ThemeToggle />
-
+          {/* Quick Action Buttons */}
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
             <button
               onClick={handleCopyAll}
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2 text-xs font-semibold transition shadow-sm ${
-                isDark
-                  ? 'border-slate-700 bg-space-card text-slate-200 hover:bg-slate-800 hover:text-white'
-                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-indigo-600'
+              title="Copy formatted Markdown"
+              className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
+                copiedAll
+                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
+                  : isDark
+                  ? 'border-emerald-900 bg-space-card text-emerald-200 hover:border-emerald-500/50 hover:text-white'
+                  : 'border-emerald-300/80 bg-emerald-100/70 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-200/80'
               }`}
             >
-              {copiedAll ? (
-                <>
-                  <Check className="h-3.5 w-3.5 text-emerald-500" />
-                  <span className="text-emerald-500">Copied</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3.5 w-3.5 text-indigo-500" />
-                  <span>Copy Markdown</span>
-                </>
-              )}
+              {copiedAll ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+              <span>{copiedAll ? 'Copied!' : 'Copy'}</span>
             </button>
 
             <button
               onClick={handleDownload}
-              title="Download as Markdown file"
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition shadow-sm ${
+              title="Download Markdown file"
+              className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
                 isDark
-                  ? 'border-slate-700 bg-space-card text-slate-200 hover:bg-slate-800 hover:text-white'
-                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-indigo-600'
+                  ? 'border-emerald-900 bg-space-card text-emerald-200 hover:border-emerald-500/50 hover:text-white'
+                  : 'border-emerald-300/80 bg-emerald-100/70 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-200/80'
               }`}
             >
-              <Download className="h-3.5 w-3.5 text-cyan-500" />
-              <span className="hidden sm:inline">Export .md</span>
+              <Download className="h-3.5 w-3.5" />
+              <span>Export</span>
             </button>
 
             {onDelete && (
               <button
                 onClick={handleDeleteClick}
-                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition shadow-sm ${
+                title={confirmDelete ? 'Click to confirm delete' : 'Delete note'}
+                className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
                   confirmDelete
-                    ? 'border-rose-500 bg-rose-500/20 text-rose-500'
+                    ? 'border-rose-500/60 bg-rose-500/20 text-rose-400'
                     : isDark
-                    ? 'border-slate-800 bg-space-card text-slate-400 hover:border-rose-500/50 hover:bg-rose-950/30 hover:text-rose-400'
-                    : 'border-slate-200 bg-white text-slate-500 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600'
+                    ? 'border-emerald-900 bg-space-card text-emerald-300/70 hover:border-rose-500/40 hover:text-rose-400'
+                    : 'border-emerald-300/80 bg-emerald-100/70 text-emerald-900 hover:border-rose-400 hover:text-rose-600'
                 }`}
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -208,27 +184,29 @@ export default function NotesView({ title, content, inputType, input, onNew, onD
             {onNew && (
               <button
                 onClick={onNew}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:shadow-md hover:shadow-indigo-500/30 active:scale-[0.98]"
+                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-emerald-500/25 transition-all hover:shadow-lg active:scale-95"
               >
                 <Plus className="h-3.5 w-3.5" />
-                <span>New Synthesis</span>
+                <span>New</span>
               </button>
             )}
+
+            <div className="ml-1 pl-2 border-l border-emerald-900/60">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Rendered Notes Markdown Document with Antigravity Styling */}
+      {/* Rendered Notes Markdown Document with Living Tree Styling */}
       <div
-        className={`rounded-3xl p-6 sm:p-10 shadow-3d transition-colors duration-300 ${
-          isDark ? 'glass-panel' : 'glass-panel bg-white/95 border-slate-200 shadow-xl'
-        }`}
+        className={`rounded-3xl p-6 sm:p-10 shadow-3d transition-colors duration-300 glass-panel`}
       >
         <div
-          className={`prose max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-2xl prose-h2:text-xl prose-h2:border-b prose-h2:pb-2.5 prose-h2:mt-10 prose-h3:text-lg prose-p:leading-relaxed prose-strong:font-semibold prose-blockquote:border-l-indigo-500 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-xl ${
+          className={`prose max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-2xl prose-h2:text-xl prose-h2:border-b prose-h2:pb-2.5 prose-h2:mt-10 prose-h3:text-lg prose-p:leading-relaxed prose-strong:font-semibold prose-blockquote:border-l-emerald-500 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-xl ${
             isDark
-              ? 'prose-invert prose-headings:text-white prose-h2:border-slate-800 prose-h3:text-indigo-400 prose-p:text-slate-300 prose-li:text-slate-300 prose-strong:text-white prose-blockquote:bg-indigo-950/20'
-              : 'prose-slate prose-headings:text-slate-900 prose-h2:border-slate-200 prose-h3:text-indigo-600 prose-p:text-slate-700 prose-li:text-slate-700 prose-strong:text-slate-900 prose-blockquote:bg-indigo-50/50'
+              ? 'prose-invert prose-headings:text-white prose-h2:border-emerald-900/60 prose-h3:text-emerald-400 prose-p:text-emerald-200/90 prose-li:text-emerald-200/90 prose-strong:text-white prose-blockquote:bg-emerald-950/20'
+              : 'prose-emerald prose-headings:text-emerald-950 prose-h2:border-emerald-200 prose-h3:text-emerald-700 prose-p:text-emerald-900/90 prose-li:text-emerald-900/90 prose-strong:text-emerald-950 prose-blockquote:bg-emerald-50/60'
           }`}
         >
           <ReactMarkdown
