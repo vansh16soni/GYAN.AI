@@ -26,11 +26,17 @@ export default function Register() {
       localStorage.setItem('user', JSON.stringify(user));
       navigate('/');
     } catch (err: any) {
-      setError(
-        err?.response?.data?.error === 'USER_EXISTS'
-          ? 'An account with that email already exists.'
-          : 'Failed to create account. Try again.'
-      );
+      const errCode = err?.response?.data?.error;
+      const errMsg = err?.response?.data?.message;
+      if (errCode === 'USER_EXISTS' || errCode === 'EMAIL_TAKEN') {
+        setError('An account with that email already exists.');
+      } else if (errMsg) {
+        setError(errMsg);
+      } else if (err?.message === 'Network Error' || !err?.response) {
+        setError('Cannot connect to backend server. Please verify the server is running.');
+      } else {
+        setError('Failed to create account. Try again.');
+      }
     } finally {
       setLoading(false);
     }
