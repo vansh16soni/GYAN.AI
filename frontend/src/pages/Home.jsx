@@ -38,10 +38,23 @@ export default function Home() {
   async function loadUserPreferences() {
     try {
       const data = await fetchSettings();
-      setSettings(data);
+      if (data && typeof data === 'object') {
+        setSettings(data);
+        try {
+          localStorage.setItem('gyanai_settings', JSON.stringify(data));
+        } catch {}
+        return;
+      }
     } catch {
-      // silent
+      // fallback to local cache
     }
+
+    try {
+      const cached = localStorage.getItem('gyanai_settings');
+      if (cached) {
+        setSettings(JSON.parse(cached));
+      }
+    } catch {}
   }
 
   async function loadHistory() {

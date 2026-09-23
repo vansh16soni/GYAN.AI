@@ -376,8 +376,8 @@ export default function NotesView({ title, content, inputType, input, onNew, onD
                     <code
                       className={`rounded-md border px-1.5 py-0.5 text-xs font-mono ${
                         isDark
-                          ? 'bg-slate-900 border-slate-800 text-cyan-300'
-                          : 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                          ? 'bg-emerald-950/60 border-emerald-900/60 text-emerald-300'
+                          : 'bg-emerald-50 border-emerald-200 text-emerald-800'
                       }`}
                       {...props}
                     >

@@ -141,6 +141,7 @@ router.put('/', async (req, res) => {
     };
 
     user.settings = merged;
+    user.markModified('settings');
     await user.save();
 
     res.json(user.settings);
@@ -156,6 +157,7 @@ router.post('/reset', async (req, res) => {
     if (!user) return res.status(404).json({ error: 'USER_NOT_FOUND' });
 
     user.settings = { ...DEFAULT_SETTINGS, preset: 'standard' };
+    user.markModified('settings');
     await user.save();
 
     res.json(user.settings);
@@ -182,6 +184,7 @@ router.post('/apply-preset', async (req, res) => {
       preset,
       customInstruction: user.settings?.customInstruction || '',
     };
+    user.markModified('settings');
     await user.save();
 
     res.json(user.settings);
