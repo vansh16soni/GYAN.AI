@@ -3,15 +3,17 @@ node_modules/
 */node_modules/
 **/node_modules/
 
-# Production builds
+# Production builds & bundles
 dist/
 */dist/
 **/dist/
 build/
 */build/
 **/build/
+.vite/
+.output/
 
-# Environment variables & secrets (Protects all DB credentials, OpenAI keys, JWT secrets)
+# Environment variables & secrets (Protects all Mongo URIs, OpenAI/API keys, JWT secrets)
 .env
 .env.*
 .env.local
@@ -24,18 +26,24 @@ frontend/.env
 **/.env
 **/.env.*
 **/*.env
-!.env.example
-!backend/.env.example
-!frontend/.env.example
+*.env.json
+*.env.js
 
-# Credentials, Keys & Certificates
-*credentials*
+# API Keys, Tokens, Database URIs & Secrets
+*api_key*
+*apikey*
 *secret*
+*credentials*
+*mongo*
+*connection*
 *.pem
 *.key
 *.cert
 *.crt
+*.pfx
+*.p12
 id_rsa*
+*.pub
 
 # Logs & Databases
 *.log
@@ -47,12 +55,17 @@ pnpm-debug.log*
 *.sqlite3
 *.db
 dump/
+*.local.db
 
 # Editor and OS files
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
 # System / Agent generation artifacts
 .system_generated/
@@ -60,6 +73,8 @@ Thumbs.db
 .agents/
 .tempmediaStorage/
 .cache/
+.parcel-cache/
 
 # TypeScript build info
 *.tsbuildinfo
+
