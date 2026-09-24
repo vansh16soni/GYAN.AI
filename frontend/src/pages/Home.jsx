@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar.jsx';
 import InputBox from '../components/InputBox.jsx';
 import NotesView from '../components/NotesView.jsx';
 import SettingsView from '../components/SettingsView.jsx';
+import DataflowView from '../components/DataflowView.jsx';
 import SynthesisProgress from '../components/SynthesisProgress.jsx';
 import TreeCanvas from '../components/TreeCanvas.jsx';
 import ThemeToggle from '../components/ThemeToggle.jsx';
@@ -19,6 +20,7 @@ export default function Home() {
   const [history, setHistory] = useState([]);
   const [activeNote, setActiveNote] = useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isDataflowOpen, setIsDataflowOpen] = useState(false);
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -85,6 +87,7 @@ export default function Home() {
       setSidebarOpen(false);
     }
     setIsSettingsOpen(false);
+    setIsDataflowOpen(false);
     setActiveNote(null);
     setInput('');
     setError('');
@@ -92,7 +95,14 @@ export default function Home() {
 
   function handleOpenSettings() {
     setActiveNote(null);
+    setIsDataflowOpen(false);
     setIsSettingsOpen(true);
+    setError('');
+  }
+
+  function handleOpenDataflow() {
+    setIsSettingsOpen(false);
+    setIsDataflowOpen(true);
     setError('');
   }
 
@@ -119,14 +129,16 @@ export default function Home() {
     }
   }
 
-  async function handleGenerate() {
+  async function handleGenerate(modeOverride = 'comprehensive') {
     if (!input.trim() || loading) return;
     setLoading(true);
     setError('');
     try {
-      const note = await generateNote(input.trim());
+      const mode = typeof modeOverride === 'string' ? modeOverride : 'comprehensive';
+      const note = await generateNote(input.trim(), mode);
       setActiveNote(note);
       setIsSettingsOpen(false);
+      setIsDataflowOpen(false);
       setInput('');
       await loadHistory();
     } catch (err) {
@@ -165,11 +177,13 @@ export default function Home() {
         notes={history}
         activeId={activeNote?._id ?? null}
         isSettingsActive={isSettingsOpen}
+        isDataflowActive={isDataflowOpen}
         onSelect={handleSelect}
         onNew={handleNew}
         onDelete={handleDelete}
         onLogout={handleLogout}
         onOpenSettings={handleOpenSettings}
+        onOpenDataflow={handleOpenDataflow}
       />
 
       <main className="relative flex flex-1 flex-col overflow-y-auto bg-transparent">
@@ -201,6 +215,13 @@ export default function Home() {
             }}
             onLogout={handleLogout}
           />
+        ) : isDataflowOpen ? (
+          <DataflowView
+            activeNote={activeNote}
+            notes={history}
+            onSelectNote={handleSelect}
+            onBack={() => setIsDataflowOpen(false)}
+          />
         ) : activeNote ? (
           <NotesView
             title={activeNote.title}
@@ -209,6 +230,7 @@ export default function Home() {
             input={activeNote.input}
             onNew={handleNew}
             onDelete={() => handleDelete(activeNote._id)}
+            onOpenDataflow={handleOpenDataflow}
           />
         ) : (
           <div className="flex flex-1 flex-col items-center justify-center p-6 sm:p-10 my-auto">

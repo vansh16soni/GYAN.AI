@@ -11,6 +11,7 @@ import {
   Settings,
   ShieldCheck,
   Menu,
+  Workflow,
 } from 'lucide-react';
 
 function relativeDate(iso) {
@@ -31,11 +32,13 @@ export default function Sidebar({
   notes = [],
   activeId,
   isSettingsActive = false,
+  isDataflowActive = false,
   onSelect,
   onNew,
   onDelete,
   onLogout,
   onOpenSettings,
+  onOpenDataflow,
 }) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
@@ -145,6 +148,50 @@ export default function Sidebar({
               <span className="font-display">New Tree Synthesis</span>
             </button>
 
+            {/* Separate Option: Interactive Data Flow */}
+            <button
+              type="button"
+              onClick={onOpenDataflow}
+              className={`w-full mt-2 flex items-center justify-between rounded-xl px-3 py-2 text-left text-xs font-semibold transition border select-none ${
+                isDataflowActive
+                  ? isDark
+                    ? 'bg-emerald-950/80 border-emerald-500/60 text-white shadow-md shadow-emerald-500/20'
+                    : 'bg-emerald-100 border-emerald-300 text-emerald-950 shadow-sm'
+                  : isDark
+                  ? 'border-emerald-900/60 bg-space-card/60 text-emerald-200 hover:bg-space-card hover:border-emerald-500/40 hover:text-white'
+                  : 'border-emerald-200 bg-white/70 text-emerald-800 hover:bg-emerald-100/70 hover:border-emerald-300'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <div
+                  className={`flex h-7 w-7 items-center justify-center rounded-lg transition-transform ${
+                    isDataflowActive
+                      ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/30 scale-105'
+                      : 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400'
+                  }`}
+                >
+                  <Workflow className="h-4 w-4" />
+                </div>
+                <div>
+                  <span className="font-display font-bold block leading-tight">
+                    Data Flow Graph
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 block mt-0.5">
+                    React Flow Canvas
+                  </span>
+                </div>
+              </div>
+              <span
+                className={`px-1.5 py-0.5 rounded-full border text-[10px] font-mono font-bold tracking-wide ${
+                  isDataflowActive
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/50 animate-pulse'
+                    : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                }`}
+              >
+                FLOW
+              </span>
+            </button>
+
             {/* Quick Search */}
             <div className="relative mt-3">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -178,7 +225,8 @@ export default function Sidebar({
               </div>
             ) : (
               filteredNotes.map((n) => {
-                const isActive = !isSettingsActive && activeId === n._id;
+                const isNoteActive = !isSettingsActive && !isDataflowActive && activeId === n._id;
+                const isFlowSelected = isDataflowActive && activeId === n._id;
                 const isConfirming = deletingId === n._id;
 
                 return (
@@ -186,17 +234,24 @@ export default function Sidebar({
                     key={n._id}
                     onClick={() => onSelect(n._id)}
                     className={`group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-left text-xs transition cursor-pointer border ${
-                      isActive
+                      isNoteActive
                         ? isDark
                           ? 'bg-emerald-950/70 border-emerald-500/50 text-white font-medium shadow-sm'
                           : 'bg-emerald-100 border-emerald-300 text-emerald-950 font-semibold shadow-sm'
+                        : isFlowSelected
+                        ? isDark
+                          ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-200 shadow-sm'
+                          : 'bg-emerald-50 border-emerald-300 text-emerald-900 shadow-sm'
                         : isDark
                         ? 'border-transparent text-emerald-200/90 hover:bg-space-card hover:text-white hover:border-emerald-900/60'
                         : 'border-transparent text-emerald-800 hover:bg-emerald-100/60 hover:text-emerald-950 hover:border-emerald-200'
                     }`}
                   >
-                    {isActive && (
+                    {isNoteActive && (
                       <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-r-full bg-emerald-400 shadow-sm shadow-emerald-400/60" />
+                    )}
+                    {isFlowSelected && (
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-3.5 w-1 rounded-r-full bg-teal-400 shadow-sm shadow-teal-400/60" />
                     )}
                     <div className="min-w-0 flex-1 pr-2 pl-1">
                       <div className="truncate text-xs font-semibold font-display">
@@ -229,7 +284,7 @@ export default function Sidebar({
 
                       <ChevronRight
                         className={`h-3.5 w-3.5 transition-transform ${
-                          isActive
+                          isNoteActive || isFlowSelected
                             ? 'text-emerald-500'
                             : 'text-emerald-400 opacity-0 group-hover:opacity-100'
                         }`}

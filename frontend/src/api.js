@@ -46,8 +46,8 @@ export async function login(email, password) {
   return data;
 }
 
-export async function generateNote(input) {
-  const { data } = await api.post('/notes/generate', { input });
+export async function generateNote(input, mode = 'comprehensive') {
+  const { data } = await api.post('/notes/generate', { input, mode });
   return data.note;
 }
 

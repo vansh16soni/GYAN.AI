@@ -65,7 +65,7 @@ export default function InputBox({
   function handleKeyDown(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (value.trim() && !loading) onSubmit();
+      if (value.trim() && !loading) onSubmit(selectedMode);
     }
   }
 
@@ -203,7 +203,7 @@ export default function InputBox({
 
           {/* Dominant Primary CTA Button */}
           <button
-            onClick={onSubmit}
+            onClick={() => onSubmit(selectedMode)}
             disabled={!value.trim() || loading}
             className="btn-primary group relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-xl px-8 py-3 text-sm font-bold text-white shadow-xl shadow-emerald-500/40 ring-2 ring-emerald-400/50 transition-all hover:shadow-emerald-500/60 hover:scale-[1.03] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
           >
