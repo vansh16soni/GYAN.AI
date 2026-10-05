@@ -27,6 +27,11 @@
     background-color: #d8ece0;
     color: #064e3b;
   }
+
+  input[type="checkbox"] {
+    accent-color: #10b981;
+    cursor: pointer;
+  }
 }
 
 /* 3D Perspective Utilities */

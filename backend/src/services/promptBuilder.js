@@ -22,7 +22,7 @@ function diffFromPreset(settings, presetName) {
   return dirty;
 }
 
-export function buildSystemPrompt(userSettings) {
+export function buildSystemPrompt(userSettings, mode = 'comprehensive') {
   const settings = {
     ...DEFAULT_SETTINGS,
     ...(userSettings || {}),
@@ -49,11 +49,21 @@ export function buildSystemPrompt(userSettings) {
     `- Use ## and ### headings. Choose headings that fit the material.`,
     `- Prefer bullets, short paragraphs, and clear definitions.`,
     `- Include code blocks (with language tags) only where the material involves code.`,
-    `- Include a Mermaid diagram only when a process, flow, hierarchy, or architecture is described.`,
+    `- Include a Mermaid diagram (using \`\`\`mermaid codeblock) whenever a process, flow, architecture, or lifecycle is described.`,
     `- Preserve facts, terms, and details from the source. Do not invent.`,
     `- No study tips, motivational lines, or commentary about the user or task.`,
     `- Output only the JSON. No text outside it.`,
   ];
+
+  if (mode === 'architectural') {
+    lines.push(
+      `- ARCHITECTURAL MODE PRIORITY: You MUST generate a comprehensive Mermaid diagram (\`\`\`mermaid flowchart TD ... \`\`\`) mapping the system architecture, component interactions, and data flow of this topic.`
+    );
+  } else if (mode === 'algorithms') {
+    lines.push(
+      `- ALGORITHMIC MODE PRIORITY: You MUST include runnable code implementations, Big-O time and space complexity analysis, and a Mermaid diagram mapping the algorithm execution steps.`
+    );
+  }
 
   // Only add rules for settings the user actually changed or active style
   const style = dirty.style || (presetName === 'custom' ? settings.style : undefined);

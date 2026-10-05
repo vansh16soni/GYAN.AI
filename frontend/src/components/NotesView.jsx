@@ -26,6 +26,7 @@ import {
   FileSpreadsheet,
   ChevronDown,
   Loader2,
+  Workflow,
 } from 'lucide-react';
 
 function cleanMarkdown(raw) {
@@ -60,7 +61,15 @@ function cleanMarkdown(raw) {
   return text;
 }
 
-export default function NotesView({ title, content, inputType, input, onNew, onDelete }) {
+export default function NotesView({
+  title,
+  content,
+  inputType,
+  input,
+  onNew,
+  onDelete,
+  onOpenDataflow,
+}) {
   const [copiedAll, setCopiedAll] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -189,6 +198,19 @@ export default function NotesView({ title, content, inputType, input, onNew, onD
               {copiedAll ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
               <span>{copiedAll ? 'Copied!' : 'Copy'}</span>
             </button>
+
+            {/* Interactive Data Flow Graph */}
+            {onOpenDataflow && (
+              <button
+                type="button"
+                onClick={onOpenDataflow}
+                title="View interactive React Flow architecture graph"
+                className="btn-secondary !text-emerald-400 hover:!text-white border-emerald-500/40"
+              >
+                <Workflow className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Flow Graph</span>
+              </button>
+            )}
 
             {/* Export Multi-Format Dropdown */}
             <div className="relative" ref={exportMenuRef}>
@@ -376,8 +398,8 @@ export default function NotesView({ title, content, inputType, input, onNew, onD
                     <code
                       className={`rounded-md border px-1.5 py-0.5 text-xs font-mono ${
                         isDark
-                          ? 'bg-slate-900 border-slate-800 text-cyan-300'
-                          : 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                          ? 'bg-emerald-950/60 border-emerald-900/60 text-emerald-300'
+                          : 'bg-emerald-50 border-emerald-200 text-emerald-800'
                       }`}
                       {...props}
                     >

@@ -13,6 +13,7 @@ export default defineConfig({
           vendor: ['react', 'react-dom', 'react-router-dom'],
           three: ['three'],
           mermaid: ['mermaid'],
+          xyflow: ['@xyflow/react', 'dagre'],
         },
       },
     },

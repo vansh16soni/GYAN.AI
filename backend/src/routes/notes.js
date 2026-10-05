@@ -10,7 +10,8 @@ const router = Router();
 router.use(auth);
 
 const generateSchema = z.object({
-  input: z.string().min(1).max(2000),
+  input: z.string().min(1).max(5000),
+  mode: z.enum(['comprehensive', 'architectural', 'algorithms']).optional(),
 });
 
 router.post('/generate', async (req, res) => {
@@ -21,11 +22,12 @@ router.post('/generate', async (req, res) => {
     return res.status(400).json({ error: 'INVALID_INPUT', details: parsed.error.flatten() });
   }
   const input = parsed.data.input.trim();
+  const mode = parsed.data.mode || 'comprehensive';
 
   try {
     const user = await User.findById(req.userId);
     const extracted = await extractContent(input);
-    const generated = await generateNotes(extracted.type, input, extracted.text, user?.settings);
+    const generated = await generateNotes(extracted.type, input, extracted.text, user?.settings, mode);
 
     const note = await Note.create({
       userId: req.userId,

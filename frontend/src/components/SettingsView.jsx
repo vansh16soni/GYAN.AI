@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext.jsx';
-import { DEFAULT_SETTINGS, PRESET_METADATA } from '../config/presets.js';
+import { DEFAULT_SETTINGS, PRESETS, PRESET_METADATA } from '../config/presets.js';
 import { checkConflict } from '../config/conflicts.js';
 import {
   fetchSettings,
@@ -69,12 +69,25 @@ export default function SettingsView({ onBack, onLogout }) {
     try {
       setLoading(true);
       const data = await fetchSettings();
-      setSettings(data);
+      if (data && typeof data === 'object') {
+        setSettings(data);
+        try {
+          localStorage.setItem('gyanai_settings', JSON.stringify(data));
+        } catch {}
+        return;
+      }
     } catch (err) {
-      console.error('Failed to load settings:', err);
+      console.warn('Failed to load settings from server, using local preferences:', err);
     } finally {
       setLoading(false);
     }
+
+    try {
+      const cached = localStorage.getItem('gyanai_settings');
+      if (cached) {
+        setSettings(JSON.parse(cached));
+      }
+    } catch {}
   }
 
   function handleFieldChange(path, value) {
@@ -90,19 +103,49 @@ export default function SettingsView({ onBack, onLogout }) {
 
       // When manually changing fields, mark preset as custom unless it's preset apply
       next.preset = 'custom';
+      try {
+        localStorage.setItem('gyanai_settings', JSON.stringify(next));
+      } catch {}
       return next;
     });
   }
 
   async function handleApplyPreset(presetKey) {
+    const presetValues = PRESETS[presetKey];
+    if (presetValues) {
+      // 1. Immediately apply preset changes to state and local storage for instant responsiveness
+      setSettings((prev) => {
+        const next = {
+          ...DEFAULT_SETTINGS,
+          ...prev,
+          ...presetValues,
+          preset: presetKey,
+          extract: { ...(DEFAULT_SETTINGS.extract || {}), ...(presetValues.extract || {}) },
+          study: { ...(DEFAULT_SETTINGS.study || {}), ...(presetValues.study || {}) },
+          accuracy: { ...(DEFAULT_SETTINGS.accuracy || {}), ...(presetValues.accuracy || {}) },
+          ai: { ...(DEFAULT_SETTINGS.ai || {}), ...(presetValues.ai || {}) },
+        };
+        try {
+          localStorage.setItem('gyanai_settings', JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2000);
+    }
+
+    // 2. Persist to server in background
     try {
       setSaving(true);
       const updated = await applyPreset(presetKey);
-      setSettings(updated);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 2500);
+      if (updated && typeof updated === 'object') {
+        setSettings(updated);
+        try {
+          localStorage.setItem('gyanai_settings', JSON.stringify(updated));
+        } catch {}
+      }
     } catch (err) {
-      console.error('Failed to apply preset:', err);
+      console.warn('Could not sync preset to backend, keeping local state:', err?.message || err);
     } finally {
       setSaving(false);
     }
@@ -111,26 +154,52 @@ export default function SettingsView({ onBack, onLogout }) {
   async function handleSave() {
     try {
       setSaving(true);
+      try {
+        localStorage.setItem('gyanai_settings', JSON.stringify(settings));
+      } catch {}
       const updated = await updateSettings(settings);
-      setSettings(updated);
+      if (updated) {
+        setSettings(updated);
+        try {
+          localStorage.setItem('gyanai_settings', JSON.stringify(updated));
+        } catch {}
+      }
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2500);
     } catch (err) {
-      console.error('Failed to save settings:', err);
+      console.warn('Failed to save settings to server, saved locally:', err);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2500);
     } finally {
       setSaving(false);
     }
   }
 
   async function handleReset() {
+    const standardPreset = PRESETS.standard || {};
+    const resetState = {
+      ...DEFAULT_SETTINGS,
+      ...standardPreset,
+      preset: 'standard',
+    };
+    setSettings(resetState);
+    try {
+      localStorage.setItem('gyanai_settings', JSON.stringify(resetState));
+    } catch {}
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2500);
+
     try {
       setSaving(true);
       const updated = await resetSettings();
-      setSettings(updated);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 2500);
+      if (updated) {
+        setSettings(updated);
+        try {
+          localStorage.setItem('gyanai_settings', JSON.stringify(updated));
+        } catch {}
+      }
     } catch (err) {
-      console.error('Failed to reset settings:', err);
+      console.warn('Failed to reset settings on server:', err);
     } finally {
       setSaving(false);
     }
@@ -219,6 +288,7 @@ export default function SettingsView({ onBack, onLogout }) {
               return (
                 <button
                   key={p.id}
+                  type="button"
                   onClick={() => handleApplyPreset(p.id)}
                   className={`flex flex-col items-start rounded-2xl p-3.5 text-left border transition-all hover:scale-[1.02] active:scale-[0.98] ${
                     isSelected
@@ -258,7 +328,7 @@ export default function SettingsView({ onBack, onLogout }) {
           }`}
         >
           <div className="flex items-center gap-2.5 mb-6 border-b pb-4 border-slate-700/20">
-            <BookOpen className="h-5 w-5 text-indigo-500" />
+            <BookOpen className="h-5 w-5 text-emerald-400" />
             <div>
               <h2 className={`text-base font-bold font-display tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Core Generation Options
@@ -276,12 +346,12 @@ export default function SettingsView({ onBack, onLogout }) {
                 onChange={(e) => handleFieldChange('style', e.target.value)}
                 className={`w-full rounded-xl border py-2 px-3 text-xs outline-none transition ${
                   isDark
-                    ? 'border-slate-800 bg-space-bg text-white focus:border-indigo-500'
-                    : 'border-slate-300 bg-slate-50 text-slate-900 focus:border-indigo-500'
+                    ? 'border-slate-800 bg-space-bg text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
+                    : 'border-slate-300 bg-slate-50 text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
                 }`}
               >
                 <option value="detailed">Detailed (Comprehensive)</option>
-                <option value="concise">Concise (~300-500 words)</option>
+                <option value="concise">Concise (Compact)</option>
                 <option value="exam">Exam-Oriented</option>
                 <option value="beginner">Beginner-Friendly</option>
                 <option value="technical">Technical / Advanced</option>
@@ -297,8 +367,8 @@ export default function SettingsView({ onBack, onLogout }) {
                 onChange={(e) => handleFieldChange('difficulty', e.target.value)}
                 className={`w-full rounded-xl border py-2 px-3 text-xs outline-none transition ${
                   isDark
-                    ? 'border-slate-800 bg-space-bg text-white focus:border-indigo-500'
-                    : 'border-slate-300 bg-slate-50 text-slate-900 focus:border-indigo-500'
+                    ? 'border-slate-800 bg-space-bg text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
+                    : 'border-slate-300 bg-slate-50 text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
                 }`}
               >
                 <option value="auto">Auto (Infer from source)</option>
@@ -316,8 +386,8 @@ export default function SettingsView({ onBack, onLogout }) {
                 onChange={(e) => handleFieldChange('language', e.target.value)}
                 className={`w-full rounded-xl border py-2 px-3 text-xs outline-none transition ${
                   isDark
-                    ? 'border-slate-800 bg-space-bg text-white focus:border-indigo-500'
-                    : 'border-slate-300 bg-slate-50 text-slate-900 focus:border-indigo-500'
+                    ? 'border-slate-800 bg-space-bg text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
+                    : 'border-slate-300 bg-slate-50 text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
                 }`}
               >
                 <option value="english">English</option>
@@ -335,7 +405,7 @@ export default function SettingsView({ onBack, onLogout }) {
               id="preserveTech"
               checked={settings.preserveTechnicalTerms}
               onChange={(e) => handleFieldChange('preserveTechnicalTerms', e.target.checked)}
-              className="h-4 w-4 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
+              className="h-4 w-4 rounded border-slate-700 accent-emerald-500 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer"
             />
             <label htmlFor="preserveTech" className={`text-xs select-none cursor-pointer ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
               Preserve technical terms in English (Recommended for bilingual synthesis)
@@ -374,8 +444,8 @@ export default function SettingsView({ onBack, onLogout }) {
                     } ${
                       isChecked
                         ? isDark
-                          ? 'border-indigo-500/40 bg-indigo-950/30 text-white font-medium'
-                          : 'border-indigo-200 bg-indigo-50 text-indigo-950 font-semibold'
+                          ? 'border-emerald-500/50 bg-emerald-950/40 text-white font-medium shadow-[0_0_12px_-2px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30'
+                          : 'border-emerald-300 bg-emerald-50 text-emerald-950 font-semibold shadow-sm'
                         : isDark
                         ? 'border-slate-800 bg-space-card/40 text-slate-400 hover:border-slate-700'
                         : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-white'
@@ -386,7 +456,7 @@ export default function SettingsView({ onBack, onLogout }) {
                       disabled={conflict.disabled}
                       checked={isChecked}
                       onChange={(e) => handleFieldChange(`extract.${key}`, e.target.checked)}
-                      className="h-3.5 w-3.5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
+                      className="h-3.5 w-3.5 rounded border-slate-700 accent-emerald-500 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer"
                     />
                     <span className="truncate">{label}</span>
                   </label>
@@ -417,8 +487,8 @@ export default function SettingsView({ onBack, onLogout }) {
                 rows={2}
                 className={`w-full rounded-xl border p-3 text-xs outline-none transition ${
                   isDark
-                    ? 'border-slate-800 bg-space-bg text-white placeholder:text-slate-600 focus:border-indigo-500'
-                    : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-indigo-500'
+                    ? 'border-slate-800 bg-space-bg text-white placeholder:text-slate-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
+                    : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50'
                 }`}
               />
             </div>
@@ -436,7 +506,7 @@ export default function SettingsView({ onBack, onLogout }) {
             className="w-full flex items-center justify-between p-5 text-left transition hover:bg-slate-500/5"
           >
             <div className="flex items-center gap-2.5">
-              <Sliders className="h-4 w-4 text-indigo-400" />
+              <Sliders className="h-4 w-4 text-emerald-400" />
               <div>
                 <h2 className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   More Options (Formatting, Length & AI Preferences)
@@ -460,10 +530,10 @@ export default function SettingsView({ onBack, onLogout }) {
                       isDark ? 'border-slate-800 bg-space-bg text-white' : 'border-slate-300 bg-slate-50 text-slate-900'
                     }`}
                   >
-                    <option value="quick">Quick (~200-300 words)</option>
+                    <option value="quick">Quick (Brief)</option>
                     <option value="medium">Medium (Standard depth)</option>
                     <option value="detailed">Detailed (Thorough)</option>
-                    <option value="veryDetailed">Very Detailed (1500+ words)</option>
+                    <option value="veryDetailed">Very Detailed (Comprehensive)</option>
                   </select>
                 </div>
 
@@ -549,8 +619,8 @@ export default function SettingsView({ onBack, onLogout }) {
                       className={`flex items-center gap-2 rounded-xl p-2 text-xs border select-none transition cursor-pointer ${
                         settings.ai?.[key]
                           ? isDark
-                            ? 'border-indigo-500/40 bg-indigo-950/30 text-white'
-                            : 'border-indigo-200 bg-indigo-50 text-indigo-950'
+                            ? 'border-emerald-500/50 bg-emerald-950/40 text-white shadow-[0_0_12px_-2px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30'
+                            : 'border-emerald-300 bg-emerald-50 text-emerald-950 font-semibold'
                           : isDark
                           ? 'border-slate-800 bg-space-card/40 text-slate-400'
                           : 'border-slate-200 bg-slate-50 text-slate-600'
@@ -560,7 +630,7 @@ export default function SettingsView({ onBack, onLogout }) {
                         type="checkbox"
                         checked={Boolean(settings.ai?.[key])}
                         onChange={(e) => handleFieldChange(`ai.${key}`, e.target.checked)}
-                        className="h-3.5 w-3.5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
+                        className="h-3.5 w-3.5 rounded border-slate-700 accent-emerald-500 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer"
                       />
                       <span className="truncate">{label}</span>
                     </label>
@@ -582,7 +652,7 @@ export default function SettingsView({ onBack, onLogout }) {
             className="w-full flex items-center justify-between p-5 text-left transition hover:bg-slate-500/5"
           >
             <div className="flex items-center gap-2.5">
-              <GraduationCap className="h-4 w-4 text-cyan-400" />
+              <GraduationCap className="h-4 w-4 text-emerald-400" />
               <div>
                 <h2 className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Advanced Settings (Study Mode, Video & Data Management)
@@ -631,8 +701,8 @@ export default function SettingsView({ onBack, onLogout }) {
                       className={`flex items-center gap-2 rounded-xl p-2 text-xs border select-none transition cursor-pointer ${
                         settings.study?.[key]
                           ? isDark
-                            ? 'border-indigo-500/40 bg-indigo-950/30 text-white'
-                            : 'border-indigo-200 bg-indigo-50 text-indigo-950'
+                            ? 'border-emerald-500/50 bg-emerald-950/40 text-white shadow-[0_0_12px_-2px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30'
+                            : 'border-emerald-300 bg-emerald-50 text-emerald-950 font-semibold'
                           : isDark
                           ? 'border-slate-800 bg-space-card/40 text-slate-400'
                           : 'border-slate-200 bg-slate-50 text-slate-600'
@@ -642,7 +712,7 @@ export default function SettingsView({ onBack, onLogout }) {
                         type="checkbox"
                         checked={Boolean(settings.study?.[key])}
                         onChange={(e) => handleFieldChange(`study.${key}`, e.target.checked)}
-                        className="h-3.5 w-3.5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
+                        className="h-3.5 w-3.5 rounded border-slate-700 accent-emerald-500 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer"
                       />
                       <span className="truncate">{label}</span>
                     </label>
@@ -668,8 +738,8 @@ export default function SettingsView({ onBack, onLogout }) {
                       className={`flex items-center gap-2 rounded-xl p-2 text-xs border select-none transition cursor-pointer ${
                         settings.video?.[key]
                           ? isDark
-                            ? 'border-indigo-500/40 bg-indigo-950/30 text-white'
-                            : 'border-indigo-200 bg-indigo-50 text-indigo-950'
+                            ? 'border-emerald-500/50 bg-emerald-950/40 text-white shadow-[0_0_12px_-2px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30'
+                            : 'border-emerald-300 bg-emerald-50 text-emerald-950 font-semibold'
                           : isDark
                           ? 'border-slate-800 bg-space-card/40 text-slate-400'
                           : 'border-slate-200 bg-slate-50 text-slate-600'
@@ -679,7 +749,7 @@ export default function SettingsView({ onBack, onLogout }) {
                         type="checkbox"
                         checked={Boolean(settings.video?.[key])}
                         onChange={(e) => handleFieldChange(`video.${key}`, e.target.checked)}
-                        className="h-3.5 w-3.5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
+                        className="h-3.5 w-3.5 rounded border-slate-700 accent-emerald-500 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer"
                       />
                       <span className="truncate">{label}</span>
                     </label>
@@ -701,7 +771,7 @@ export default function SettingsView({ onBack, onLogout }) {
                         : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                     }`}
                   >
-                    <Download className="h-3.5 w-3.5 text-cyan-400" />
+                    <Download className="h-3.5 w-3.5 text-emerald-400" />
                     <span>Download Settings JSON</span>
                   </button>
 
@@ -725,7 +795,7 @@ export default function SettingsView({ onBack, onLogout }) {
           }`}
         >
           <div className="flex items-center gap-2.5 mb-6 border-b pb-4 border-slate-700/20">
-            <User className="h-5 w-5 text-indigo-500" />
+            <User className="h-5 w-5 text-emerald-400" />
             <h2 className={`text-base font-bold font-display tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
               User Profile & Theme
             </h2>
@@ -733,7 +803,7 @@ export default function SettingsView({ onBack, onLogout }) {
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-6">
             <div className="flex items-center gap-4">
-              <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 text-white text-xl font-black font-mono shadow-lg shadow-indigo-500/30">
+              <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 text-white text-xl font-black font-mono shadow-lg shadow-emerald-500/30">
                 {userName.charAt(0).toUpperCase()}
                 <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-slate-900 bg-emerald-400" />
               </div>
